@@ -1,16 +1,18 @@
 {
-    "name": "ichat",
-    "version": "1.0.0",
-    "description": "",
-    "main": "index.js",
-    "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1"
-    },
-    "keywords": [],
-    "author": "",
-    "license": "ISC",
-    "engines": {
-        "node": "14.21.2",
-        "pnpm": "7.26.2"
-    }
+  "name": "ichat",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
+    "start:bf": "pnpm -r --filter=./apps/bf run start",
+    "start:web": "pnpm -r --filter=./apps/web run start"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "engines": {
+    "node": "14.21.2",
+    "pnpm": "7.26.2"
+  }
 }
