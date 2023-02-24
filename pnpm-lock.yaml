@@ -1,0 +1,30 @@
+lockfileVersion: 5.4
+
+importers:
+
+  .:
+    specifiers: {}
+
+  apps/bf:
+    specifiers:
+      '@ichat/components': workspace:^1.0.0
+      '@ichat/models': workspace:^1.0.0
+      '@ichat/types': workspace:^1.0.0
+      '@ichat/utils': workspace:^1.0.0
+    dependencies:
+      '@ichat/components': link:../../packages/components
+      '@ichat/models': link:../../packages/models
+      '@ichat/types': link:../../packages/types
+      '@ichat/utils': link:../../packages/utils
+
+  apps/web:
+    specifiers:
+      '@ichat/components': workspace:^1.0.0
+      '@ichat/models': workspace:^1.0.0
+      '@ichat/types': workspace:^1.0.0
+      '@ichat/utils': workspace:^1.0.0
+    dependencies:
+      '@ichat/components': link:../../packages/components
+      '@ichat/models': link:../../packages/models
+      '@ichat/types': link:../../packages/types
+      '@ichat/utils': link:../../packages/utils

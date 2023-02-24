@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>结果页</title>
+</head>
+<body>
+<div id="result"></div>
+<script>
+    const href = window.href
+    window.href = "https://cn.bing.com"
+    window.href = href
+    if (window !== window.top) {
+        const qs = location.search.length ? location.search.substring(1) : ""
+        const query = {}
+        const args = qs.length ? qs.split("&") : []
+        args.forEach((item) => {
+            let [name, value] = item.split("=")
+            name = decodeURIComponent(name)
+            value = decodeURIComponent(value)
+            query[name] = value
+        })
+        const {success, liteVerifyToken, ...other} = query
+        console.log(query)
+        const isSuccess = success === "true"
+        const result = {
+            isSuccess,
+            data: {
+                kycVerifyToken: liteVerifyToken,
+                images: {image_best: ""}, //适配phoneMixin
+                ...other
+            }
+        }
+        document.getElementById("result").innerText = JSON.stringify(result)
+        window.top.postMessage(result, window.top.location.origin)
+    }
+</script>
+</body>
+</html>

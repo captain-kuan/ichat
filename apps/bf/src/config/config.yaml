@@ -1,0 +1,13 @@
+prot: 3000
+secret: i_chat_dev
+database:
+  host: localhost
+  prot: 3306
+  username: "root"
+  password: "0000"
+  database: "chat"
+redis:
+  prot: 6379
+  host: 127.0.0.1
+  password: ""
+  db: 0
