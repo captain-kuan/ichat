@@ -7,10 +7,20 @@ export {}
 
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
+    ChatItem: typeof import('./src/components/ChatItem.vue')['default']
     MessageItem: typeof import('./src/components/MessageItem.vue')['default']
     RoomItem: typeof import('./src/components/RoomItem.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     UserItem: typeof import('./src/components/UserItem.vue')['default']
+    VanButton: typeof import('vant/es')['Button']
+    VanField: typeof import('vant/es')['Field']
+    VanForm: typeof import('vant/es')['Form']
+    VanIcon: typeof import('vant/es')['Icon']
+    VanImage: typeof import('vant/es')['Image']
+    VanNavBar: typeof import('vant/es')['NavBar']
+    VanSwipeCell: typeof import('vant/es')['SwipeCell']
+    VanTabbar: typeof import('vant/es')['Tabbar']
+    VanTabbarItem: typeof import('vant/es')['TabbarItem']
   }
 }

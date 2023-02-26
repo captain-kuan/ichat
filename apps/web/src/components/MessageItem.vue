@@ -2,7 +2,7 @@
   <div class="message-item" v-if="!isSelf">
     <van-image class="header" />
     <div class="message-content">
-      <p class="name">{{ msg.name }}</p>
+      <p class="name">{{ msg.userId }}</p>
       <p class="message">
         {{ msg }}
       </p>

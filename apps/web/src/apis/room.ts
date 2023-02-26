@@ -1,8 +1,8 @@
-import request from "../utils/request";
+import request from "@/utils/request";
 
 export function getAllRooms() {
     return request({
-        url: "/room/all"
+        url: "/group"
     })
 }
 

@@ -30,7 +30,7 @@
 
 <script>
 import {reactive, ref} from "vue";
-import {register} from "../apis";
+import {register} from "@/apis";
 import {Toast} from "vant";
 
 export default {
