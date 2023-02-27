@@ -1,27 +1,26 @@
 <template>
-  <button @click="face">face</button>
-  <iframe v-if="show" :src="src"></iframe>
+  <div>
+    <video ref="video"></video>
+    <button @click="face">face</button>
+  </div>
 </template>
 
-<script>
-import {ref} from "vue"
+<script lang="ts" setup>
+const video = ref<HTMLVideoElement>();
 
-export default {
-  name: "Face",
-  setup() {
-    const show = ref(false)
-    const src = ref(`${location.origin}/AuthResult.html?success=true`)
-    const face = () => {
-      show.value = true
-    }
-    return {show, src, face}
-  }
-}
+const face = () => {
+  console.log(navigator.mediaDevices.enumerateDevices());
+  
+  navigator.mediaDevices
+    .getDisplayMedia({ video: true, audio: true })
+    .then((stream) => {
+      video.value.srcObject = stream;
+      video.value.onloadedmetadata = () => {
+        video.value.play();
+      };
+    })
+    .catch((err) => {
+      console.error(`${err.name}: ${err.message}`);
+    });
+};
 </script>
-
-<style scoped>
-iframe {
-  width: 100vw;
-  height: 100vh;
-}
-</style>
