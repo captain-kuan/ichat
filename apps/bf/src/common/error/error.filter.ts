@@ -11,12 +11,11 @@ export class HttpErrorFilter implements ExceptionFilter {
         const response = ctx.getResponse<Response>()
         const status = exception.getStatus()
         const res: ErrorResponse = {
-            message: exception.message,
+            msg: exception.message,
             time: new Date().getTime(),
-            success: false,
             path: request.url,
             code: status
         }
-        response.status(status).json(res)
+        response.status(status === 401 ? 401 : 200).json(res)
     }
 }

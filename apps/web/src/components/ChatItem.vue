@@ -5,7 +5,7 @@
       <div class="content-box">
         <div class="content">
           <p class="title">{{ chat.name }}</p>
-          <p class="message">{{ lastMessage.message }}</p>
+          <p class="message">{{ lastMessage?.message }}</p>
         </div>
         <div class="status">
           <p>{{ fromNow }}</p>
@@ -33,7 +33,7 @@ const props = defineProps<{
 }>();
 
 const fromNow = computed(() => {
-  return _fromNow(props.lastMessage.sendTime);
+  return _fromNow(props.lastMessage?.sendTime);
 });
 </script>
 

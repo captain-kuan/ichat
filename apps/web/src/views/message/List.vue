@@ -12,7 +12,6 @@
 </template>
 
 <script lang="ts" setup>
-import { reactive, ref } from 'vue';
 import MainLayout from '@/layouts/MainLayout.vue';
 import ChatItem from '@/components/ChatItem.vue';
 import { useRouter, Router } from 'vue-router';
@@ -35,8 +34,7 @@ getAllRooms().then((res) => {
 const router: Router = useRouter();
 const goRoom = (id) => {
   router.push({
-    path: '/detail/room',
-    query: { id },
+    path: `/chat/room/${id}`,
   });
 };
 </script>

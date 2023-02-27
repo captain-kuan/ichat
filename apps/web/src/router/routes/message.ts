@@ -1,7 +1,7 @@
 import { RouteRecordRaw } from 'vue-router';
 export const messageRoute: RouteRecordRaw = {
-    path: '/message',
-    redirect: '/message/list',
+    path: '/chat',
+    redirect: '/chat/list',
     meta: { isAuth: false },
     children: [
         {
@@ -10,9 +10,9 @@ export const messageRoute: RouteRecordRaw = {
             component: () => import('@/views/message/List.vue'),
         },
         {
-            path: 'detail',
+            path: 'room/:id?',
             meta: { isAuth: false },
-            component: () => import('@/views/message/Detail.vue'),
+            component: () => import('@/views/message/Chat.vue'),
         },
     ],
 };

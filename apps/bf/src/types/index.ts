@@ -1,12 +1,4 @@
-
-
-export interface Response<T> {
-    data?: T;
-    code: number
-    message: string,
-    success: boolean
-
-}
+import {Response} from "@ichat/types"
 export interface ErrorResponse extends Response<void> {
     time?: number
     path?: string

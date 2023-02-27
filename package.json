@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
-    "start:bf": "pnpm -r --filter=./apps/bf run start",
+    "start:bf": "pnpm -r --filter=./apps/bf run start:dev",
     "start:web": "pnpm -r --filter=./apps/web run start"
   },
   "keywords": [],

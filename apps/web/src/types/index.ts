@@ -13,7 +13,7 @@ export interface Room {
 
 export interface User {
   userId: string;
-  header: string;
+  avatar: string;
   name: string;
 }
 

@@ -18,7 +18,7 @@ export class GroupService {
   }
 
   findAll(userId: number) {
-    return `This action returns all group`;
+    return [];
   }
 
   findOne(id: number) {

@@ -1,26 +1,35 @@
 <template>
-  <van-form class="content d-flex column  a-center">
+  <van-form class="content flex flex-col justify-center items-center a-center">
     <van-image class="logo"></van-image>
-    <van-field label="账户" v-model="form.account" placeholder="account"></van-field>
     <van-field
-        type="password"
-        v-model="form.password"
-        label="密码"
-        placeholder="password"
+      label="账户"
+      v-model="form.account"
+      placeholder="account"
+    ></van-field>
+    <van-field
+      type="password"
+      v-model="form.password"
+      label="密码"
+      placeholder="password"
     />
     <van-field
-        type="password"
-        v-model="form.rPassword"
-        label="确认密码"
-        placeholder="password"
+      type="password"
+      v-model="form.rPassword"
+      label="确认密码"
+      placeholder="password"
     />
-    <van-button
+    <div class="px-2 w-full">
+      <van-button
         class="login-btn"
-        :disabled="isPass" block round
+        :disabled="isPass"
+        block
+        round
         type="primary"
-        @click="submit">
-      注册
-    </van-button>
+        @click="submit"
+      >
+        注册
+      </van-button>
+    </div>
     <p class="link">
       已有账户？
       <router-link to="/login">去登录</router-link>
@@ -28,43 +37,36 @@
   </van-form>
 </template>
 
-<script>
-import {reactive, ref} from "vue";
-import {register} from "@/apis";
-import {Toast} from "vant";
+<script setup lang="ts">
+import { register } from '@/apis';
+import { Toast } from 'vant';
 
-export default {
-  name: "Register",
-  setup() {
-    const isPass = ref(false)
-    const form = reactive({
-      account: "",
-      password: "",
-      rPassword: ""
-    })
-
-    const submit = () => {
-      if (!form.account) {
-        return Toast.fail("请输入账户名")
-      }
-      if (!form.password) {
-        return Toast.fail("请输入密码")
-      }
-      if (form.password !== form.rPassword) {
-        return Toast.fail("两次输入不一致")
-      }
-      register(form).then(({success, msg}) => {
-        console.log(msg)
-        Toast[success ? "success" : "fail"](msg)
-      })
-    }
-    return {
-      isPass,
-      form,
-      submit
-    }
+const isPass = ref(false);
+const form = reactive({
+  account: '',
+  password: '',
+  rPassword: '',
+});
+const router = useRouter();
+const submit = () => {
+  if (!form.account) {
+    return Toast.fail('请输入账户名');
   }
-}
+  if (!form.password) {
+    return Toast.fail('请输入密码');
+  }
+  if (form.password !== form.rPassword) {
+    return Toast.fail('两次输入不一致');
+  }
+  register(form).then(({ code, msg }) => {
+    console.log(code,msg);
+    
+    Toast[code === 0 ? 'success' : 'fail'](msg);
+    if (code === 0) {
+      router.push('/login');
+    }
+  });
+};
 </script>
 
 <style scoped>
@@ -80,7 +82,7 @@ export default {
 
 .link {
   width: 100%;
-  margin-top: 50px;
+  margin-top: 20px;
   padding-right: 50px;
   text-align: right;
 }

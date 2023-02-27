@@ -17,6 +17,8 @@ export class MessageGateway implements OnGatewayConnection {
     server: Server;
     constructor(private jwtService: JwtService) {}
     async handleConnection(client: any) {
+        console.log(client);
+        
         const token = client.handshake.auth.token;
         try {
             const user: Partial<User> = this.jwtService.verify(token);
@@ -29,10 +31,10 @@ export class MessageGateway implements OnGatewayConnection {
     }
     @SubscribeMessage('message')
     onEvent(client: any, payload: any): Observable<any> {
-
         return of({
             event: 'message',
             data: {
+                payload,
                 msg: `hello ${payload.name}!`,
             },
         });

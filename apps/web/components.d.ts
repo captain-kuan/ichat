@@ -9,7 +9,6 @@ declare module '@vue/runtime-core' {
   export interface GlobalComponents {
     ChatItem: typeof import('./src/components/ChatItem.vue')['default']
     MessageItem: typeof import('./src/components/MessageItem.vue')['default']
-    RoomItem: typeof import('./src/components/RoomItem.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     UserItem: typeof import('./src/components/UserItem.vue')['default']

@@ -4,7 +4,7 @@ const router = createRouter({
     routes: [
         {
             path: '/',
-            redirect: '/message',
+            redirect: '/chat',
         },
         ...routes,
         {

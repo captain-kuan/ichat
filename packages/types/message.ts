@@ -1,9 +1,9 @@
 export interface Message {
+  id: string
   sendId: string;
   chatId: string;
-  targetId: string;
   message: string;
-  sendTime: string;
+  sendTime: Date;
 }
 export enum ChatType {
   group,
@@ -27,8 +27,3 @@ export interface PersonChat extends Chat {
   type: ChatType.person;
 }
 
-export interface User {
-  id: string;
-  name: string;
-  avatar: string;
-}

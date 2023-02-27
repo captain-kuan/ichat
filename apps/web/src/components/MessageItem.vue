@@ -1,17 +1,8 @@
 <template>
-  <div class="message-item" v-if="!isSelf">
-    <van-image class="header" />
+  <div class="message-item flex" :class="{ self: isSelf }">
     <div class="message-content">
-      <p class="name">{{ msg.userId }}</p>
-      <p class="message">
-        {{ msg }}
-      </p>
-    </div>
-  </div>
-  <div v-else class="message-item self">
-    <div class="message-content">
-      <p class="message">
-        {{ msg }}
+      <p class="message rounded">
+        {{ msg.message }}
       </p>
     </div>
     <van-image class="header" />
@@ -19,19 +10,19 @@
 </template>
 
 <script lang="ts" setup>
-import { Message } from "@/types";
+import { Message } from '@ichat/types';
 defineProps<{ isSelf: boolean; msg: Message }>();
 </script>
 
 <style lang="scss" scoped>
 .message-item {
-  display: flex;
-  box-sizing: border-box;
   margin-bottom: 20px;
-
+  font-size: 16px;
+  line-height: 1.5;
+  flex-direction: row-reverse;
   .header {
-    width: 80px;
-    height: 80px;
+    width: 60px;
+    height: 60px;
     margin: 0 20px 0 0;
   }
 
@@ -47,16 +38,14 @@ defineProps<{ isSelf: boolean; msg: Message }>();
       $box-color: #fff;
       flex: 1;
       min-height: 60px;
-      line-height: 60px;
       background-color: $box-color;
       padding: 10px;
       color: #666;
-      font-size: 30px;
       position: relative;
       word-break: break-all;
 
       &:after {
-        content: "";
+        content: '';
         top: 10px;
         left: 0;
         transform: translateX(-100%);
@@ -68,6 +57,7 @@ defineProps<{ isSelf: boolean; msg: Message }>();
   }
 
   &.self {
+    flex-direction: row;
     .header {
       margin: 0 0 0 20px;
     }
@@ -77,11 +67,11 @@ defineProps<{ isSelf: boolean; msg: Message }>();
     }
 
     .message {
-      $box-color: #91b8f1;
+      $box-color: #77a9f3;
       background-color: $box-color;
 
       &:after {
-        content: "";
+        content: '';
         top: 10px;
         right: 0;
         transform: translateX(100%);

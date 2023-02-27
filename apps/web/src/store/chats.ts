@@ -1,12 +1,14 @@
 import { Chat, ChatType, Message } from '@ichat/types';
 import { useContactStore } from './concat';
-
+import { socket, emitter } from '@/utils';
+import { getChatDetails } from "@/apis"
+import { useUserStore } from "@/store"
 export const useChatsStore = defineStore('chats', () => {
   const chats = reactive<Map<string, Chat & { lastMessage: Message }>>(
     new Map(),
   );
   const { contact } = storeToRefs(useContactStore());
-  const handleMessage = (message: Message) => {
+  const handleMessage = async (message: Message) => {
     const { sendId, chatId } = message;
     if (chats.has(chatId)) {
       chats.get(chatId).lastMessage = message;
@@ -15,10 +17,18 @@ export const useChatsStore = defineStore('chats', () => {
       if (sendId === chatId) {
         chat = contact.value.find((item) => item.id === message.chatId);
       } else {
-        
+        const { code, data } = await getChatDetails(chatId)
+        if (code === 0) {
+          chat = data
+        }
       }
       chats.set(message.chatId, { ...chat, lastMessage: message });
     }
   };
-  return { chats, handleMessage };
+
+  const { user } = useUserStore()
+  const sendMessage = async ({ chatId, message }) => {
+    await socket.sendMessage({ chatId, message, sendId: user.id })
+  }
+  return { chats, sendMessage, handleMessage };
 });

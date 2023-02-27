@@ -1,5 +1,5 @@
-import request from '../utils/request';
-interface LoginParams {
+import request from '@/utils/request';
+export interface LoginParams {
     account: string;
     password: string;
 }
@@ -15,9 +15,5 @@ interface RegisterParams {
     password: string;
 }
 export function register(data: RegisterParams) {
-    return request({
-        url: '/auth/register',
-        method: 'post',
-        data,
-    });
+    return request.post<any>('/auth/register', data);
 }
