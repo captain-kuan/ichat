@@ -38,8 +38,12 @@ const form = reactive({
   password: '',
 });
 const { login } = useUserStore();
+const router = useRouter();
+const route = useRoute();
 const toLogin = async () => {
   await login(form);
+  const redirectPath = route.query?.redirect as string;
+  router.push(redirectPath || '/');
 };
 </script>
 <style>

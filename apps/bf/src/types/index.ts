@@ -1,5 +1,5 @@
-import {Response} from "@ichat/types"
+import { Response } from '@ichat/types';
 export interface ErrorResponse extends Response<void> {
-    time?: number
-    path?: string
+  time?: number;
+  path?: string;
 }

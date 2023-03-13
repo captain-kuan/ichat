@@ -11,17 +11,16 @@ import { RedisCacheModule } from '@/cache/redis-cache.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from '@/user/entities/user.entity';
 export const jwtModule = JwtModule.registerAsync({
-  imports: [ConfigModule,RedisCacheModule],
+  imports: [ConfigModule, RedisCacheModule],
   inject: [ConfigService],
-  useFactory:async (configService: ConfigService) => {
-    const secret = configService.get('secret')
+  useFactory: async (configService: ConfigService) => {
+    const secret = configService.get('secret');
     return {
       secret: secret,
       signOptions: { expiresIn: '1d' },
-    }
-  }
-})
-
+    };
+  },
+});
 
 @Module({
   imports: [
@@ -30,10 +29,10 @@ export const jwtModule = JwtModule.registerAsync({
     PassportModule,
     ConfigModule,
     jwtModule,
-    RedisCacheModule
+    RedisCacheModule,
   ],
   providers: [AuthService, LocalStrategy, JwtStrategy],
   controllers: [AuthController],
   exports: [jwtModule],
 })
-export class AuthModule { }
+export class AuthModule {}

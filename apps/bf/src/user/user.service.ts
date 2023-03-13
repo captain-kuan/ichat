@@ -8,19 +8,22 @@ export class UsersService {
   constructor(
     @InjectRepository(User)
     private usersRepository: Repository<User>,
-  ) { }
+  ) {}
   findById(id: number) {
-    if (id == null) return null
-    return this.usersRepository.findOneBy({ UId: id })
+    if (id == null) return null;
+    return this.usersRepository.findOneBy({ id });
   }
-  changeUser(id,{Uname}:Partial<User>){
-    this.usersRepository.update(id, {Uname})
+  changeUser(id, { name }: Partial<User>) {
+    this.usersRepository.update(id, { name });
   }
   findOne(account: string): Promise<User> {
-    return this.usersRepository.findOneBy({ UAccount: account });
+    return this.usersRepository.findOneBy({ account });
   }
   create({ account, password }: RegisterDto) {
-    const user = this.usersRepository.create({ UAccount: account, UPassword: password })
-    return this.usersRepository.save(user)
+    const user = this.usersRepository.create({
+      account,
+      password,
+    });
+    return this.usersRepository.save(user);
   }
 }

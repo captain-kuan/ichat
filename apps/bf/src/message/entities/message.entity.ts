@@ -1,21 +1,21 @@
 import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
 
 export class Message {
-    @PrimaryGeneratedColumn()
-    MId: number
+  @PrimaryGeneratedColumn()
+  id: number;
 
-    @Column()
-    MMessage: string
+  @Column()
+  message: string;
 
-    @Column({ default: 1 })
-    MType: number
+  @Column({ default: 1 })
+  type: number;
 
-    @Column()
-    MFromId: number
+  @Column()
+  fromId: number;
 
-    @Column()
-    MToId: number
-    
-    @Column({ default: true })
-    MIsActive: boolean
+  @Column()
+  toId: number;
+
+  @Column({ default: true })
+  isActive: boolean;
 }

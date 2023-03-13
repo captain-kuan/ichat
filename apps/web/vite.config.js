@@ -37,6 +37,6 @@ export default defineConfig({
             }
         },
         host: true,
-        port: 9000
+        port: 8080
     }
 })

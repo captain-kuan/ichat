@@ -1,23 +1,23 @@
-import { Entity, Column, PrimaryGeneratedColumn, BeforeInsert, OneToMany } from 'typeorm';
-import * as bcrypt from "bcryptjs"
+import { Entity, Column, PrimaryGeneratedColumn, BeforeInsert } from 'typeorm';
+import * as bcrypt from 'bcryptjs';
 import { Exclude } from 'class-transformer';
 @Entity()
 export class User {
   @PrimaryGeneratedColumn()
-  UId: number;
+  id: number;
 
   @Column({ length: 100, nullable: true })
-  Uname?: string;
+  name?: string;
 
   @Column({ length: 100, nullable: true })
-  UAccount: string;
+  account: string;
 
   @Exclude()
-  @Column({ select: false, })
-  UPassword: string;
+  @Column({ select: false })
+  password: string;
 
   @Column({ default: true })
-  UIsActive?: boolean;
+  isActive?: boolean;
 
   @Exclude()
   @Column({
@@ -25,7 +25,7 @@ export class User {
     type: 'timestamp',
     default: () => 'CURRENT_TIMESTAMP',
   })
-  UCreateTime: Date;
+  createTime: Date;
 
   @Exclude()
   @Column({
@@ -33,12 +33,11 @@ export class User {
     type: 'timestamp',
     default: () => 'CURRENT_TIMESTAMP',
   })
-  UUpdateTime: Date;
-
+  updateTime: Date;
 
   @BeforeInsert()
   async encryptPwd() {
-    if (!this.UPassword) return;
-    this.UPassword = await bcrypt.hashSync(this.UPassword, 10);
+    if (!this.password) return;
+    this.password = await bcrypt.hashSync(this.password, 10);
   }
 }

@@ -7,8 +7,8 @@ import { MessageGateway } from './message.gateway';
 import { JwtModule } from '@nestjs/jwt';
 import { jwtModule } from '@/auth/auth.module';
 @Module({
-    imports: [TypeOrmModule.forFeature([Message]), jwtModule],
-    controllers: [MessageController],
-    providers: [MessageService, MessageGateway, JwtModule],
+  imports: [TypeOrmModule.forFeature([Message]), jwtModule],
+  controllers: [MessageController],
+  providers: [MessageService, MessageGateway, JwtModule],
 })
 export class MessageModule {}

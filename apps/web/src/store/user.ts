@@ -5,16 +5,11 @@ import { emitter } from "@/utils"
 export const useUserStore = defineStore("user", () => {
     const { handleMessage } = useChatsStore()
     const user = ref<User>({ id: "", name: "", avatar: "" })
-    const router = useRouter()
-    const route = useRoute()
-
     const login = async (params: LoginParams) => {
         const { code, data } = await _login(params)
         if (code === 0) {
             localStorage.setItem('token', data.access_token);
             emitter.emit("login")
-            const redirectPath = route.query.redirect as string
-            router.push(redirectPath || "/")
         }
     }
     return { user, login }

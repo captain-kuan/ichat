@@ -10,11 +10,11 @@ export class GroupService {
   constructor(
     @InjectRepository(Group)
     private groupsRepository: Repository<Group>,
-  ) { }
+  ) {}
 
   async create(createId: number, createDto: CreateGroupDto) {
-    let group = this.groupsRepository.create()
-    return ""
+    const group = this.groupsRepository.create();
+    return group;
   }
 
   findAll(userId: number) {

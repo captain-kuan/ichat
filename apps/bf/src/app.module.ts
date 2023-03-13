@@ -26,57 +26,57 @@ import { ValidationPipe } from './common/validation/validation.pipe';
 import { RedisCacheModule } from './cache/redis-cache.module';
 import { FileModule } from './file/file.module';
 @Module({
-    imports: [
-        ConfigModule.forRoot({
-            load: [configuration],
-        }),
-        TypeOrmModule.forRootAsync({
-            imports: [ConfigModule],
-            inject: [ConfigService],
-            useFactory: (configService: ConfigService) => {
-                const databaseConfig = configService.get('database');
-                return {
-                    type: 'mysql',
-                    host: 'localhost',
-                    ...databaseConfig,
-                    synchronize: true,
-                    entities: [User, Friend, Group, GroupUser, Message],
-                };
-            },
-        }),
-        UsersModule,
-        AuthModule,
-        GroupModule,
-        FriendModule,
-        MessageModule,
-        RedisCacheModule,
-        FileModule,
-    ],
-    controllers: [AppController],
-    providers: [
-        AppService,
-        {
-            provide: APP_INTERCEPTOR,
-            useClass: LoggingInterceptor,
-        },
-        {
-            provide: APP_GUARD,
-            useClass: JwtAuthGuard,
-        },
-        {
-            provide: APP_PIPE,
-            useClass: ValidationPipe,
-        },
-        {
-            provide: APP_INTERCEPTOR,
-            useClass: TransformInterceptor,
-        },
-        {
-            provide: APP_FILTER,
-            useClass: HttpErrorFilter,
-        },
-    ],
+  imports: [
+    ConfigModule.forRoot({
+      load: [configuration],
+    }),
+    TypeOrmModule.forRootAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) => {
+        const databaseConfig = configService.get('database');
+        return {
+          type: 'mysql',
+          host: 'localhost',
+          ...databaseConfig,
+          synchronize: true,
+          entities: [User, Friend, Group, GroupUser, Message],
+        };
+      },
+    }),
+    UsersModule,
+    AuthModule,
+    GroupModule,
+    FriendModule,
+    MessageModule,
+    RedisCacheModule,
+    FileModule,
+  ],
+  controllers: [AppController],
+  providers: [
+    AppService,
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: LoggingInterceptor,
+    },
+    {
+      provide: APP_GUARD,
+      useClass: JwtAuthGuard,
+    },
+    {
+      provide: APP_PIPE,
+      useClass: ValidationPipe,
+    },
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: TransformInterceptor,
+    },
+    {
+      provide: APP_FILTER,
+      useClass: HttpErrorFilter,
+    },
+  ],
 })
 export class AppModule {
-    constructor(private dataSource: DataSource) {}
+  constructor(private dataSource: DataSource) {}
 }

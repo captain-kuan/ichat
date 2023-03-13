@@ -3,42 +3,44 @@ import { User } from '@/user/entities/user.entity';
 import { UseGuards } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import {
-    SubscribeMessage,
-    WebSocketGateway,
-    WsResponse,
-    WebSocketServer,
-    OnGatewayConnection,
+  SubscribeMessage,
+  WebSocketGateway,
+  WsResponse,
+  WebSocketServer,
+  OnGatewayConnection,
 } from '@nestjs/websockets';
 import { Server } from 'socket.io';
 import { Observable, of } from 'rxjs';
 @WebSocketGateway(3001, { cors: true })
 export class MessageGateway implements OnGatewayConnection {
-    @WebSocketServer()
-    server: Server;
-    constructor(private jwtService: JwtService) {}
-    async handleConnection(client: any) {
-        console.log(client);
-        
-        const token = client.handshake.auth.token;
-        try {
-            const user: Partial<User> = this.jwtService.verify(token);
-            if (!user) {
-                client.disconnect();
-            }
-        } catch (error) {
-            client.disconnect();
-        }
-    }
-    @SubscribeMessage('message')
-    onEvent(client: any, payload: any): Observable<any> {
-        return of({
-            event: 'message',
-            data: {
-                payload,
-                msg: `hello ${payload.name}!`,
-            },
-        });
-    }
+  @WebSocketServer()
+  server: Server;
+  constructor(private jwtService: JwtService) {}
+  async handleConnection(client: any) {
+    console.log(client);
 
-    sendMessage() {}
+    const token = client.handshake.auth.token;
+    try {
+      const user: Partial<User> = this.jwtService.verify(token);
+      if (!user) {
+        client.disconnect();
+      }
+    } catch (error) {
+      client.disconnect();
+    }
+  }
+  @SubscribeMessage('message')
+  onEvent(client: any, payload: any): Observable<any> {
+    return of({
+      event: 'message',
+      data: {
+        payload,
+        msg: `hello ${payload.name}!`,
+      },
+    });
+  }
+
+  sendMessage() {
+    return '';
+  }
 }

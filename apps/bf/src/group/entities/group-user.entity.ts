@@ -2,21 +2,21 @@ import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class GroupUser {
-    @PrimaryGeneratedColumn()
-    GUId: number
+  @PrimaryGeneratedColumn()
+  id: number;
 
-    @Column()
-    GUGroupId: number
+  @Column()
+  groupId: number;
 
-    @Column()
-    GUUserId: number
+  @Column()
+  userId: number;
 
-    @Column()
-    GUName: string
+  @Column()
+  name: string;
 
-    @Column({ default: 1 })
-    GUType: number
+  @Column({ default: 1 })
+  type: number;
 
-    @Column({ default: true })
-    GUIsActive?: boolean
+  @Column({ default: true })
+  isActive?: boolean;
 }

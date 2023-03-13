@@ -2,15 +2,15 @@ import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class Group {
-    @PrimaryGeneratedColumn()
-    GId: number
+  @PrimaryGeneratedColumn()
+  id: number;
 
-    @Column()
-    GName: string
+  @Column()
+  name: string;
 
-    @Column({ default: 1 })
-    GType: number
-    
-    @Column({ default: true })
-    GIsActive?: boolean
+  @Column({ default: 1 })
+  type: number;
+
+  @Column({ default: true })
+  isActive?: boolean;
 }

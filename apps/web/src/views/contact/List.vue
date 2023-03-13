@@ -10,7 +10,7 @@
 import { ref } from 'vue';
 import MainLayout from '@/layouts/MainLayout.vue';
 import { useRouter, Router } from 'vue-router';
-import { getAllRooms } from '@/apis';
+import { getFriends } from '@/apis';
 import UserItem from '@/components/UserItem.vue';
 
 interface User {
@@ -26,7 +26,7 @@ const users = ref<User[]>([
     { id: '4', username: '测试', avatar: '' },
     { id: '5', username: '测试', avatar: '' },
 ]);
-getAllRooms().then((res) => {
+getFriends().then((res) => {
     console.log(res);
 });
 const router: Router = useRouter();

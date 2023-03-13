@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
+    "start": "run-p start:bf start:web",
     "start:bf": "pnpm -r --filter=./apps/bf run start:dev",
     "start:web": "pnpm -r --filter=./apps/web run start"
   },
@@ -14,5 +15,8 @@
   "engines": {
     "node": "^14.21.1",
     "pnpm": "^7.18.1"
+  },
+  "devDependencies": {
+    "npm-run-all": "^4.1.5"
   }
 }
