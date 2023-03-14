@@ -1,7 +1,12 @@
 export * from "./auth"
+export * as authApis from "./auth"
 export * from "./group"
+export * as groupApis from "./group"
 export * from "./user"
+export * as userApis from "./user"
 export * from "./chat"
+export * as chatApis from "./chat"
 export * from "./friend"
+export * as friendApis from "./friend"
 export * from "./contact"
-
+export * as contactApis from "./contact"

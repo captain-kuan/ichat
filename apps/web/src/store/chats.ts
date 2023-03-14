@@ -4,31 +4,41 @@ import { socket, emitter } from '@/utils';
 import { getChatDetails } from "@/apis"
 import { useUserStore } from "@/store"
 export const useChatsStore = defineStore('chats', () => {
-  const chats = reactive<Map<string, Chat & { lastMessage: Message }>>(
-    new Map(),
+  const chats = reactive<Record<string, Chat & { messages: (Message & { isSelf: boolean })[] }>>(
+    {}
   );
   const { contact } = storeToRefs(useContactStore());
   const handleMessage = async (message: Message) => {
-    const { sendId, chatId } = message;
-    if (chats.has(chatId)) {
-      chats.get(chatId).lastMessage = message;
+    console.log(message);
+    
+    const { sendId, toId } = message;
+    if (sendId in chats) {
+      chats[sendId].messages.push({ ...message, isSelf: false });
     } else {
       let chat: Chat;
-      if (sendId === chatId) {
-        chat = contact.value.find((item) => item.id === message.chatId);
+      if (sendId === toId) {
+        chat = contact?.value.find((item) => item.id === message.toId)||{} as Chat;
       } else {
-        const { code, data } = await getChatDetails(chatId)
+        const { code, data } = await getChatDetails(toId)
         if (code === 0) {
           chat = data
         }
       }
-      chats.set(message.chatId, { ...chat, lastMessage: message });
+      chats[message.sendId] = { ...chat, messages: [{ ...message, isSelf: false }] }
     }
   };
 
   const { user } = useUserStore()
-  const sendMessage = async ({ chatId, message }) => {
-    await socket.sendMessage({ chatId, message, sendId: user.id })
+  const sendMessage = async ({ toId, content }) => {
+    await socket.sendMessage({ toId, content, sendId: String(user.id) })
+    const chat = chats[toId]
+    if (chat == null) {
+      const { code, data } = await getChatDetails(toId)
+      const messages = [{ content, sendId: String(user.id), toId, isSelf: true, sendTime: new Date(), id: Math.random().toString() }]
+      chats[toId] = { ...data, messages }
+    } else {
+      chat.messages.push({ content, sendId: String(user.id), toId, isSelf: true, sendTime: new Date(), id: Math.random().toString() })
+    }
   }
-  return { chats, sendMessage, handleMessage };
+  return { chats, sendMessage, handleMessage, };
 });

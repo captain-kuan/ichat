@@ -4,6 +4,7 @@
   "author": "zhouzk",
   "license": "MIT",
   "description": "chat",
+  "type": "module",
   "scripts": {
     "start": "vite",
     "build": "vite build",
@@ -22,6 +23,7 @@
     "lib-flexible": "^0.3.2",
     "mitt": "^3.0.0",
     "pinia": "^2.0.28",
+    "pinia-plugin-persistedstate": "^3.1.0",
     "socket.io-client": "^4.5.4",
     "tailwindcss": "^3.2.4",
     "vant": "^3.2.6",

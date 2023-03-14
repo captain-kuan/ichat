@@ -1,15 +1,13 @@
+import { Message, MessageEvent } from '@ichat/types';
 import { io, Socket } from 'socket.io-client';
 
-export enum MessageType {
-  connect = '1',
-  message = '2',
-}
+
 interface Handler {
   (data: any): void;
 }
 let _socket: Socket;
 export class SignSocket {
-  messageHandlers: Map<MessageType, Set<Handler>>;
+  messageHandlers: Map<MessageEvent, Set<Handler>>;
   constructor(public socketPath: string) {
     this.messageHandlers = new Map();
   }
@@ -20,11 +18,13 @@ export class SignSocket {
       auth: { token },
     });
     return new Promise<void>((resolve) => {
-      _socket.on(MessageType.connect, function () {
+      _socket.on(MessageEvent.connect, function () {
         resolve();
       });
-      _socket.on(MessageType.message, (data: any) => {
-        const handlers = this.messageHandlers.get(MessageType.message);
+      _socket.on(MessageEvent.message, (data: any) => {
+        const handlers = this.messageHandlers.get(MessageEvent.message);
+        console.log(handlers,data);
+        
         if (handlers) {
           handlers.forEach((handler) => {
             handler(data);
@@ -33,10 +33,12 @@ export class SignSocket {
       });
     });
   }
-  sendMessage(data: any) {
+  sendMessage(data: Omit<Message, 'id'|'sendTime'>) {
     _socket.emit('message', data);
   }
-  addMessageHandler(type: MessageType, handler: Handler) {
+  addMessageHandler(type: MessageEvent, handler: Handler) {
+    console.log('addMessageHandler');
+    
     const handlers = this.messageHandlers.get(type);
     if (handlers) {
       handlers.add(handler);
@@ -46,7 +48,7 @@ export class SignSocket {
       this.messageHandlers.set(type, hs);
     }
   }
-  removeMessageHandler(type: MessageType, handler: Handler) {
+  removeMessageHandler(type: MessageEvent, handler: Handler) {
     const handlers = this.messageHandlers.get(type);
     if (handlers) {
       handlers.delete(handler);

@@ -1,8 +1,8 @@
 <template>
-  <div class="message-item flex" :class="{ self: isSelf }">
+  <div class="message-item flex" :class="{ self: message.isSelf }">
     <div class="message-content">
       <p class="message rounded">
-        {{ msg.message }}
+        {{ message.content }}
       </p>
     </div>
     <van-image class="header" />
@@ -11,7 +11,9 @@
 
 <script lang="ts" setup>
 import { Message } from '@ichat/types';
-defineProps<{ isSelf: boolean; msg: Message }>();
+defineProps<{
+  message: Pick<Message & { isSelf: boolean }, 'content' | 'isSelf'>;
+}>();
 </script>
 
 <style lang="scss" scoped>

@@ -5,7 +5,7 @@
       <div class="content-box">
         <div class="content">
           <p class="title">{{ chat.name }}</p>
-          <p class="message">{{ lastMessage?.message }}</p>
+          <p class="message">{{ lastMessage?.content }}</p>
         </div>
         <div class="status">
           <p>{{ fromNow }}</p>

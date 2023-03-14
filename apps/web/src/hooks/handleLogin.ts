@@ -1,12 +1,14 @@
 import { socket, emitter } from '@/utils';
 import { useChatsStore } from '@/store';
-import { MessageType } from '@/utils/socket';
+import { MessageEvent } from '@ichat/types';
 export function handleLogin() {
   const token = localStorage.getItem('token');
   const { handleMessage } = useChatsStore();
   const callback = (token: string) => {
     socket.init({ token });
-    socket.addMessageHandler(MessageType.connect, (msg) => {
+    
+    socket.addMessageHandler(MessageEvent.message, (msg) => {
+    
       handleMessage(msg);
     });
   };

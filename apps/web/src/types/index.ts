@@ -1,11 +1,4 @@
-export interface Message {
-  id: string;
-  roomId: string;
-  userId: string;
-  message: string;
-  time: number;
-}
-
+import {Message} from "@ichat/types"
 export interface Room {
   roomId: string;
   users?: string[];

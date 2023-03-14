@@ -17,9 +17,9 @@ export class UsersController {
   @Get('searchByName')
   @ApiBearerAuth()
   @ApiQuery({ name: 'account', description: '账号名' })
-  @ApiOperation({ summary: '根据id获取好友', description: '返回好友id' })
+  @ApiOperation({ summary: '根据账号名获取用户', description: '用户列表' })
   searchFriendByName(@Query('account') account: string) {
-    return this.userService.findOne(account);
+    return this.userService.findByName(account);
   }
   @Put()
   changeUserinfo(@CurrentUser() user: User, @Body() body: Partial<User>) {

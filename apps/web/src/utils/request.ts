@@ -74,7 +74,7 @@ instance.interceptors.response.use(
     nextTick(async () => {
       const route = useRoute();
       console.log(route);
-      
+
       if (response.status === 401) {
         await router.push({
           path: '/login',

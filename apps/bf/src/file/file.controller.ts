@@ -8,14 +8,14 @@ import {
     UseInterceptors,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { writeFileSync,createReadStream,createWriteStream } from 'fs';
-
-import { join } from 'path';
+import { FileService } from './file.service';
 @Controller('file')
 export class FileController {
+    constructor(private fileService: FileService) { }
+
     @Post('upload')
     @UseInterceptors(FileInterceptor('file'))
-    uploadFile(
+    async uploadFile(
         @UploadedFile(
             new ParseFilePipe({
                 validators: [
@@ -26,7 +26,6 @@ export class FileController {
         )
         file: Express.Multer.File,
     ) {
-        console.log( file);
-        return ""
+        return 'http://localhost:3000/static/upload/'+ file.filename
     }
 }

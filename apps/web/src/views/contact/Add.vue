@@ -8,19 +8,40 @@
       @click-right-icon="search"
     >
     </van-field>
-    <van-cell v-for="item in result" :value="item.account"></van-cell>
+    <div class="p-2">
+      <div v-for="item in result" class="flex justify-between items-center">
+        <div class="flex items-center">
+          <van-image class="avatar" :src="item.avatar"></van-image>
+          <div>
+            {{ item.name }}
+          </div>
+        </div>
+        <van-button v-if="user.id !== item.id" type="primary" size="small"
+          >添加</van-button
+        >
+      </div>
+    </div>
   </detail-layout>
 </template>
 
 <script setup lang="ts">
 import DetailLayout from '@/layouts/DetailLayout.vue';
 import { searchUserByName } from '@/apis';
-import { it } from 'node:test';
+import { useUserStore, storeToRefs } from '@/store';
+const { user } = storeToRefs(useUserStore());
 const account = ref('');
 const result = ref([]);
 const search = async () => {
-  console.log('search');
   const { code, data } = await searchUserByName(account.value);
-  result.value = Array.isArray(data) ? data : [data];
+  if (code === 0) {
+    result.value = Array.isArray(data) ? data : [data];
+  }
 };
 </script>
+<style lang="less" scoped>
+.avatar {
+  width: 40px;
+  height: 40px;
+  margin-right: 10px;
+}
+</style>
