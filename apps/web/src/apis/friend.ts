@@ -4,6 +4,10 @@ export function getFriends() {
   return request.get('/friend');
 }
 
-export function searchAccountByName(){
-  return request.post
+export function sendAddFriend(data: { friendId: string }) {
+  return request.post('/friend/sendAdd', data);
+}
+
+export function agreeAddFriend(data: { friendId: string }) {
+  return request.post('/friend/agreeAdd', data);
 }

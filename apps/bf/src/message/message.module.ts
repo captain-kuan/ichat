@@ -10,5 +10,6 @@ import { jwtModule } from '@/auth/auth.module';
   imports: [TypeOrmModule.forFeature([Message]), jwtModule],
   controllers: [MessageController],
   providers: [MessageService, MessageGateway, JwtModule],
+  exports: [MessageGateway],
 })
 export class MessageModule {}

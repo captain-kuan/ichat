@@ -1,0 +1,4 @@
+# top-most EditorConfig file
+root = true
+indent_style = tab
+end_of_line = lf

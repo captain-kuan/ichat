@@ -1,20 +1,20 @@
 <template>
-  <div class="chat-room flex-1 flex flex-col p-1">
-    <div class="flex-1">
-      {{ chats }}
+  <div class="chat-room reactive flex flex-col" ref="chatRoomRef">
+    <div class="flex-1 p-1">
       <message-item v-for="msg in messages" :message="msg"> </message-item>
     </div>
-    <van-field
-      class="sticky"
-      v-model="input"
-      border
-      placeholder="发送消息"
-      @keydown.enter="send"
-    >
-      <template #button>
-        <van-button type="success" @click="send">send</van-button>
-      </template>
-    </van-field>
+    <div class="sticky bottom-0">
+      <van-field
+        v-model="input"
+        border
+        placeholder="发送消息"
+        @keydown.enter="send"
+      >
+        <template #button>
+          <van-button type="success" @click="send">send</van-button>
+        </template>
+      </van-field>
+    </div>
   </div>
 </template>
 
@@ -25,22 +25,39 @@ import { useChatsStore, useUserStore, storeToRefs } from '@/store';
 
 const route = useRoute();
 const chatId = computed(() => route.params.id as string);
-const messages = computed(() => {
-  return chats.value[chatId.value]?.messages || [];
-});
+
 const input = ref('');
-const isSelf = (msg: Message): boolean => {
-  return msg.sendId === user.id;
-};
 const { sendMessage, chats } = storeToRefs(useChatsStore());
-const { user } = useUserStore();
 const send = () => {
   sendMessage({ content: input.value, toId: chatId.value });
   input.value = '';
 };
+const messages = computed(() => {
+  return chats.value[chatId.value]?.messages || [];
+});
+
+const chatRoomRef = ref<HTMLElement>();
+
+onMounted(() => {
+  watch(
+    () => messages.value.length,
+    () => {
+      nextTick(() => {
+        if (chatRoomRef) {
+          chatRoomRef.value.scrollTop = chatRoomRef.value.scrollHeight;
+        }
+      });
+    },
+    { immediate: true },
+  );
+});
 </script>
 
 <style scoped>
 .chat-room {
+  background: #eee;
+  height: 100vh;
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 </style>

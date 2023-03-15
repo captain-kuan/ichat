@@ -48,7 +48,7 @@ export class AuthController {
     return this.authService.register(params);
   }
   @Get('info')
-  getInfo(@CurrentUser('Uid') userId: number) {
+  getInfo(@CurrentUser('Uid') userId: string) {
     return this.authService.getUser(userId);
   }
 }

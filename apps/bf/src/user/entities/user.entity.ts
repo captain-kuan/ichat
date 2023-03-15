@@ -3,8 +3,8 @@ import * as bcrypt from 'bcryptjs';
 import { Exclude } from 'class-transformer';
 @Entity()
 export class User {
-  @PrimaryGeneratedColumn()
-  id: number;
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
 
   @Column({ length: 100, nullable: true })
   name?: string;
@@ -18,7 +18,7 @@ export class User {
 
   @Column({ length: 100, nullable: true })
   avatar: string;
-  
+
   @Column({ default: true })
   isActive?: boolean;
 

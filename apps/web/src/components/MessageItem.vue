@@ -1,7 +1,7 @@
 <template>
   <div class="message-item flex" :class="{ self: message.isSelf }">
     <div class="message-content">
-      <p class="message rounded">
+      <p class="message rounded shadow-sm">
         {{ message.content }}
       </p>
     </div>

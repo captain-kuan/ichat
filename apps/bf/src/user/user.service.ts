@@ -8,8 +8,8 @@ export class UsersService {
   constructor(
     @InjectRepository(User)
     private usersRepository: Repository<User>,
-  ) { }
-  findById(id: number) {
+  ) {}
+  findById(id: string) {
     if (id == null) return null;
     return this.usersRepository.findOneBy({ id });
   }
@@ -20,7 +20,10 @@ export class UsersService {
     return this.usersRepository.findOneBy({ account });
   }
   findByName(account: string): Promise<User[]> {
-    return this.usersRepository.find({ where: { account }, select: ['id', "account", "avatar"] });
+    return this.usersRepository.find({
+      where: { account },
+      select: ['id', 'account', 'avatar'],
+    });
   }
   create({ account, password }: RegisterDto) {
     const user = this.usersRepository.create({

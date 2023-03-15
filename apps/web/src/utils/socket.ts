@@ -1,7 +1,6 @@
 import { Message, MessageEvent } from '@ichat/types';
 import { io, Socket } from 'socket.io-client';
 
-
 interface Handler {
   (data: any): void;
 }
@@ -18,27 +17,28 @@ export class SignSocket {
       auth: { token },
     });
     return new Promise<void>((resolve) => {
-      _socket.on(MessageEvent.connect, function () {
+      _socket.on('connect', function () {
         resolve();
       });
-      _socket.on(MessageEvent.message, (data: any) => {
-        const handlers = this.messageHandlers.get(MessageEvent.message);
-        console.log(handlers,data);
-        
-        if (handlers) {
-          handlers.forEach((handler) => {
-            handler(data);
-          });
-        }
-      });
+      for (const event in MessageEvent) {
+        _socket.on(event, (data) => {
+          this.handleMessage(event as MessageEvent, data);
+        });
+      }
     });
   }
-  sendMessage(data: Omit<Message, 'id'|'sendTime'>) {
+  handleMessage(type: MessageEvent, data: any) {
+    const handlers = this.messageHandlers.get(type);
+    if (handlers) {
+      handlers.forEach((handler) => {
+        handler(data);
+      });
+    }
+  }
+  sendMessage(data: Omit<Message, 'id' | 'sendTime'>) {
     _socket.emit('message', data);
   }
   addMessageHandler(type: MessageEvent, handler: Handler) {
-    console.log('addMessageHandler');
-    
     const handlers = this.messageHandlers.get(type);
     if (handlers) {
       handlers.add(handler);

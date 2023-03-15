@@ -1,14 +1,14 @@
 export interface Message {
-  id: string
+  id: string;
   sendId: string;
   toId: string;
   content: string;
-  sendTime: Date
+  sendTime: Date;
 }
 
 export enum MessageEvent {
-  connect = 'connect',
   message = 'message',
+  addFriend = 'addFriend',
 }
 
 export enum ChatType {
@@ -20,8 +20,8 @@ export interface Chat {
   type: ChatType;
   name: string;
   id: string;
-  isConcern?: boolean;//关注
-  isIgnore?: boolean;//忽略
+  isConcern?: boolean; //关注
+  isIgnore?: boolean; //忽略
   avatar: string;
 }
 
@@ -32,4 +32,3 @@ export interface GroupChat extends Chat {
 export interface PersonChat extends Chat {
   type: ChatType.person;
 }
-

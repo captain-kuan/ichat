@@ -61,20 +61,18 @@ instance.interceptors.request.use((config) => {
 instance.interceptors.response.use(
   async (response) => {
     if (response.data.code !== 0) {
-      Toast.fail(response.data.message);
+      Toast.fail(response.data.msg);
     }
     return response.data;
   },
   ({ response }) => {
     if (response.data.code !== 0) {
-      if (response.data.message) {
-        Toast.fail(response.data.message);
+      if (response.data.msg) {
+        Toast.fail(response.data.msg);
       }
     }
     nextTick(async () => {
       const route = useRoute();
-      console.log(route);
-
       if (response.status === 401) {
         await router.push({
           path: '/login',

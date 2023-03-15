@@ -4,7 +4,6 @@
   "author": "zhouzk",
   "license": "MIT",
   "description": "chat",
-  "type": "module",
   "scripts": {
     "start": "vite",
     "build": "vite build",

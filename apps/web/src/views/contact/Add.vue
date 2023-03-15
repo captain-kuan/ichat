@@ -13,10 +13,14 @@
         <div class="flex items-center">
           <van-image class="avatar" :src="item.avatar"></van-image>
           <div>
-            {{ item.name }}
+            {{ item.account }}
           </div>
         </div>
-        <van-button v-if="user.id !== item.id" type="primary" size="small"
+        <van-button
+          v-if="user.id !== item.id"
+          type="primary"
+          size="small"
+          @click="addFriend(item.id)"
           >添加</van-button
         >
       </div>
@@ -26,17 +30,20 @@
 
 <script setup lang="ts">
 import DetailLayout from '@/layouts/DetailLayout.vue';
-import { searchUserByName } from '@/apis';
+import { searchUserByName, sendAddFriend } from '@/apis';
 import { useUserStore, storeToRefs } from '@/store';
 const { user } = storeToRefs(useUserStore());
 const account = ref('');
 const result = ref([]);
-const search = async () => {
+async function search() {
   const { code, data } = await searchUserByName(account.value);
   if (code === 0) {
     result.value = Array.isArray(data) ? data : [data];
   }
-};
+}
+function addFriend(friendId: string) {
+  sendAddFriend({ friendId });
+}
 </script>
 <style lang="less" scoped>
 .avatar {

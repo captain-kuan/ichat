@@ -15,10 +15,9 @@ import { Observable, of } from 'rxjs';
 export class MessageGateway implements OnGatewayConnection {
   @WebSocketServer()
   server: Server;
-  users: Map<string, string>
+  users: Map<string, string>;
   constructor(private jwtService: JwtService) {
-    this.users = new Map()
-    
+    this.users = new Map();
   }
   async handleConnection(client: Socket) {
     const token = client.handshake.auth.token;
@@ -28,7 +27,7 @@ export class MessageGateway implements OnGatewayConnection {
       if (!user) {
         client.disconnect();
       } else {
-        this.users.set(String(user.id), client.id)
+        this.users.set(String(user.id), client.id);
       }
     } catch (error) {
       console.log(error);
@@ -37,13 +36,7 @@ export class MessageGateway implements OnGatewayConnection {
   }
   @SubscribeMessage('message')
   onEvent(client: Socket, payload: any): Observable<any> {
-    const clientId = this.users.get(String(payload.toId))
-    if (clientId) {
-      client.to(clientId).emit('message', {...payload,sendTime:new Date()})
-    } else {
-      console.log(payload.toId + '不在线');
-
-    }
+    this.sendMessage('message', payload);
     return of({
       event: 'message',
       data: {
@@ -53,7 +46,16 @@ export class MessageGateway implements OnGatewayConnection {
     });
   }
 
-  sendMessage() {
-    return '';
+  sendMessage(
+    type,
+    content: { content: string; toId: string; sendId: string },
+  ) {
+    const clientId = this.users.get(content.toId);
+    if (clientId) {
+      this.server.to(clientId).emit(type, { ...content, sendTime: new Date() });
+    } else {
+      console.log(content.toId + '不在线');
+    }
+    return content;
   }
 }

@@ -43,7 +43,7 @@ export class AuthService {
     }
     return this.usersService.create(params);
   }
-  async getUser(userId: number) {
+  async getUser(userId: string) {
     return this.usersService.findById(userId);
   }
 }

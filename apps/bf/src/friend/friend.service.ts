@@ -1,8 +1,9 @@
+import { MessageGateway } from '@/message/message.gateway';
 import { User } from '@/user/entities/user.entity';
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { CreateFriendDto } from './dto/create-firend.dto';
+import { SendAddFriendDto, AgreeFriendDto } from './dto/create-firend.dto';
 import { UpdateFriendDto } from './dto/update-friend.dto';
 import { Friend } from './entities/friend.entity';
 
@@ -11,11 +12,12 @@ export class FriendService {
   constructor(
     @InjectRepository(Friend)
     private friendsRepository: Repository<Friend>,
+    private readonly ws: MessageGateway,
   ) {}
   findAll(user: User) {
     return this.friendsRepository.findBy({ userId: user.id });
   }
-  async addFriend(friend: CreateFriendDto, user: User) {
+  async addFriend(friend: AgreeFriendDto, user: User) {
     const oldOne = await this.findOne(friend.friendId, user);
     if (oldOne) {
       throw new BadRequestException('已添加该好友');
@@ -23,24 +25,36 @@ export class FriendService {
     const newFriend = this.friendsRepository.create({
       friendId: friend.friendId,
       userId: user.id,
-      name: friend.nickname,
+      name: friend.nickname || friend.friendId,
     });
     return this.friendsRepository.save(newFriend);
   }
-  findOne(friendId: number, user: User) {
+  sendAddFriendReq(friend: SendAddFriendDto, user: User) {
+    this.ws.sendMessage('addFriend', {
+      content: friend.friendId,
+      sendId: user.id,
+      toId: friend.friendId,
+    });
+    return {
+      content: friend.friendId,
+      sendId: user.id,
+      toId: friend.friendId,
+    };
+  }
+  findOne(friendId: string, user: User) {
     return this.friendsRepository.findOneBy({
       friendId,
       userId: user.id,
     });
   }
-  async delOne(friendId: number, user: User) {
+  async delOne(friendId: string, user: User) {
     const oldOne = await this.findOne(friendId, user);
     if (oldOne == null) {
       throw new BadRequestException('未找到对应id的好友');
     }
     return this.friendsRepository.delete(oldOne.id);
   }
-  async updateOne(friendId: number, user: User, data: UpdateFriendDto) {
+  async updateOne(friendId: string, user: User, data: UpdateFriendDto) {
     const oldOne = await this.findOne(friendId, user);
     if (oldOne == null) {
       throw new BadRequestException('未找到对应id的好友');
