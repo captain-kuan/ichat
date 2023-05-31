@@ -21,7 +21,7 @@
 </template>
 
 <script setup lang="ts">
-import { Toast } from 'vant';
+import { showToast } from 'vant';
 import request from '@/utils/request';
 import MainLayout from '@/layouts/MainLayout.vue';
 import { getUserInfo, changeUserInfo } from '@/apis';
@@ -50,7 +50,7 @@ init();
 const submit = async () => {
   const { code } = await changeUserInfo(userInfo.value);
   if (code === 0) {
-    Toast.success('修改成功');
+    showToast('修改成功');
   }
 };
 const upload = async (file) => {

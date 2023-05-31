@@ -8,7 +8,6 @@
     "baseUrl": "src",
     "paths": {
       "@/*": ["*"],
-      "@c/*": ["components/*"]
     }
   },
   "exclude": ["node_modules"],

@@ -18,6 +18,7 @@ export class SignSocket {
     });
     return new Promise<void>((resolve) => {
       _socket.on('connect', function () {
+        console.log('socket connect success');
         resolve();
       });
       for (const event in MessageEvent) {

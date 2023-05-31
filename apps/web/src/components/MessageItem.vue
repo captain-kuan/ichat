@@ -16,7 +16,7 @@ defineProps<{
 }>();
 </script>
 
-<style lang="scss" scoped>
+<style lang="less" scoped>
 .message-item {
   margin-bottom: 20px;
   font-size: 16px;
@@ -37,10 +37,10 @@ defineProps<{
     }
 
     .message {
-      $box-color: #fff;
+      @box-color: #fff;
       flex: 1;
       min-height: 60px;
-      background-color: $box-color;
+      background-color: @box-color;
       padding: 10px;
       color: #666;
       position: relative;
@@ -52,7 +52,7 @@ defineProps<{
         left: 0;
         transform: translateX(-100%);
         border: transparent solid 10px;
-        border-right-color: $box-color;
+        border-right-color: @box-color;
         position: absolute;
       }
     }
@@ -69,8 +69,8 @@ defineProps<{
     }
 
     .message {
-      $box-color: #77a9f3;
-      background-color: $box-color;
+      @box-color: #77a9f3;
+      background-color: @box-color;
 
       &:after {
         content: '';
@@ -78,7 +78,7 @@ defineProps<{
         right: 0;
         transform: translateX(100%);
         border: transparent solid 10px;
-        border-left-color: $box-color;
+        border-left-color: @box-color;
         position: absolute;
       }
     }

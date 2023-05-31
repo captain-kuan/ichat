@@ -39,7 +39,7 @@
 
 <script setup lang="ts">
 import { register } from '@/apis';
-import { Toast } from 'vant';
+import { showToast } from 'vant';
 
 const isPass = ref(false);
 const form = reactive({
@@ -50,18 +50,16 @@ const form = reactive({
 const router = useRouter();
 const submit = () => {
   if (!form.account) {
-    return Toast.fail('请输入账户名');
+    return showToast({ message: '请输入账户名', type: 'fail' });
   }
   if (!form.password) {
-    return Toast.fail('请输入密码');
+    return showToast({ message: '请输入密码', type: 'fail' });
   }
   if (form.password !== form.rPassword) {
-    return Toast.fail('两次输入不一致');
+    return showToast({ message: '两次输入不一致', type: 'fail' });
   }
   register(form).then(({ code, msg }) => {
-    console.log(code,msg);
-    
-    Toast[code === 0 ? 'success' : 'fail'](msg);
+    showToast({ message: msg, type: code === 0 ? 'success' : 'fail' });
     if (code === 0) {
       router.push('/login');
     }

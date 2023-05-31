@@ -19,7 +19,7 @@
 </template>
 
 <script lang="ts" setup>
-import MessageItem from '@c/MessageItem.vue';
+import MessageItem from '@/components/MessageItem.vue';
 import { Message } from '@ichat/types';
 import { useChatsStore, useUserStore, storeToRefs } from '@/store';
 

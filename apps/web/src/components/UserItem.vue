@@ -3,7 +3,7 @@
         <div>
             <img class="avatar" :src="user.avatar" alt="" />
         </div>
-        <div>{{ user.username }}</div>
+        <div>{{ user.name }}</div>
     </div>
 </template>
 <script setup lang="ts">
@@ -11,7 +11,7 @@ import { defineProps } from 'vue';
 
 interface UserInfo {
     avatar?: string;
-    username: string;
+    name: string;
 }
 defineProps<{ user: UserInfo }>();
 </script>

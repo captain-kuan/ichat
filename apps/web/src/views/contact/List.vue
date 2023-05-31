@@ -1,7 +1,12 @@
 <template>
   <main-layout>
     <div class="home">
-      <user-item v-for="user in users" :user="user" :key="user.id" />
+      <user-item
+        v-for="user in users"
+        :user="user"
+        :key="user.id"
+        @click="goRoom(user)"
+      />
     </div>
   </main-layout>
 </template>
@@ -15,7 +20,7 @@ import UserItem from '@/components/UserItem.vue';
 
 interface User {
   id: string;
-  username: string;
+  name: string;
   avatar?: string;
 }
 
@@ -26,12 +31,11 @@ getFriends().then(({ code, data }) => {
   }
 });
 const router: Router = useRouter();
-const goRoom = (id) => {
+function goRoom(user: User) {
   router.push({
-    path: '/detail/room',
-    query: { id },
+    path: `/chat/room/${user.id}`,
   });
-};
+}
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="less" scoped></style>

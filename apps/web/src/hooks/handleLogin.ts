@@ -1,7 +1,7 @@
 import { socket, emitter } from '@/utils';
 import { useChatsStore } from '@/store';
 import { MessageEvent } from '@ichat/types';
-import { Dialog } from 'vant';
+import { showDialog } from 'vant';
 import 'vant/es/dialog/style/index';
 export function handleLogin() {
   const token = localStorage.getItem('token');
@@ -13,7 +13,7 @@ export function handleLogin() {
       handleMessage(msg);
     });
     socket.addMessageHandler(MessageEvent.addFriend, (msg) => {
-      Dialog.confirm({ message: 'addFriend' }).then(() => {
+      showDialog({ message: 'addFriend' }).then(() => {
         console.log(msg);
         addFriend(msg);
       });
