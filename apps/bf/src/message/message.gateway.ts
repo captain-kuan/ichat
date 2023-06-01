@@ -11,6 +11,8 @@ import {
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
 import { Observable, of } from 'rxjs';
+import { MessageEvent } from '@ichat/types';
+
 @WebSocketGateway(3001, { cors: true })
 export class MessageGateway implements OnGatewayConnection {
   @WebSocketServer()
@@ -34,11 +36,11 @@ export class MessageGateway implements OnGatewayConnection {
       client.disconnect();
     }
   }
-  @SubscribeMessage('message')
+  @SubscribeMessage(MessageEvent.message)
   onEvent(client: Socket, payload: any): Observable<any> {
-    this.sendMessage('message', payload);
+    this.sendMessage(MessageEvent.message, payload);
     return of({
-      event: 'message',
+      event: MessageEvent.message,
       data: {
         payload,
         msg: `hello ${payload.sendId}!`,

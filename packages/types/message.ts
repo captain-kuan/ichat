@@ -1,34 +1,15 @@
+import { ChatType } from '.';
 export interface Message {
   id: string;
-  sendId: string;
-  toId: string;
-  content: string;
-  sendTime: Date;
+  type: ChatType; //消息类型
+  formId: string; //消息来源
+  sendId: string; //消息发送者
+  toId: string; //去向
+  content: string; //消息内容
+  sendTime: Date; //发送时间
 }
 
-export enum MessageEvent {
+export const enum MessageEvent {
   message = 'message',
   addFriend = 'addFriend',
-}
-
-export enum ChatType {
-  group,
-  person,
-}
-
-export interface Chat {
-  type: ChatType;
-  name: string;
-  id: string;
-  isConcern?: boolean; //关注
-  isIgnore?: boolean; //忽略
-  avatar: string;
-}
-
-export interface GroupChat extends Chat {
-  type: ChatType.group;
-}
-
-export interface PersonChat extends Chat {
-  type: ChatType.person;
 }

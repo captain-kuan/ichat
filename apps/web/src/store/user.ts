@@ -1,6 +1,7 @@
 import { User } from '@ichat/types';
 import { authApis, LoginParams, userApis } from '@/apis';
 import { emitter } from '@/utils';
+
 export const useUserStore = defineStore('user', () => {
   const user = ref<User>({ id: '', name: '', avatar: '' });
   const login = async (params: LoginParams) => {

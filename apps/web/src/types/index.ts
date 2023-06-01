@@ -1,4 +1,5 @@
-import {Message} from "@ichat/types"
+import { Message, Chat } from '@ichat/types';
+export * from '@ichat/types';
 export interface Room {
   roomId: string;
   users?: string[];
@@ -21,3 +22,5 @@ export interface RootState {
   users: User[];
   user: UserSelf;
 }
+
+export type ActiveChat = Chat & { lastMsg: Message };

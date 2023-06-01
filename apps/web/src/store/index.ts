@@ -7,7 +7,7 @@ export { useChatsStore } from './chats';
 export { useContactStore } from './concat';
 export { useUserStore } from './user';
 
-const pinia = createPinia();
+export const pinia = createPinia();
 pinia.use(
   createPersistedState({
     auto: true,
