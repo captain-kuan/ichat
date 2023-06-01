@@ -11,5 +11,5 @@ export interface Message {
 
 export const enum MessageEvent {
   message = 'message',
-  addFriend = 'addFriend',
+  addChat = 'addChat',
 }

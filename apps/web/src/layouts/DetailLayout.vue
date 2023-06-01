@@ -1,8 +1,8 @@
 <template>
-  <div class="page">
+  <div class="min-h-screen flex flex-col">
     <van-nav-bar :title="title" left-arrow @click-left="back"></van-nav-bar>
-    <main class="main flex flex-col">
-      <slot></slot>
+    <main class="flex-1 main flex flex-col">
+      <router-view></router-view>
     </main>
   </div>
 </template>
@@ -22,5 +22,4 @@ const back = () => {
 };
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>

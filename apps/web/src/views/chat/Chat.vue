@@ -1,5 +1,5 @@
 <template>
-  <div class="chat-room reactive flex flex-col" ref="chatRoomRef">
+  <div class="chat-room flex-1 reactive flex flex-col" ref="chatRoomRef">
     <div class="flex-1 p-1">
       <message-item v-for="msg in messages" :message="msg"> </message-item>
     </div>
@@ -27,13 +27,13 @@ const route = useRoute();
 const chatId = computed(() => route.params.id as string);
 
 const input = ref('');
-const { sendMessage, chats } = storeToRefs(useChatsStore());
+const { activeChats } = storeToRefs(useChatsStore());
 const send = () => {
-  sendMessage({ content: input.value, toId: chatId.value });
+  ({ content: input.value, toId: chatId.value });
   input.value = '';
 };
 const messages = computed(() => {
-  return chats.value[chatId.value]?.messages || [];
+  return ""
 });
 
 const chatRoomRef = ref<HTMLElement>();
@@ -56,7 +56,6 @@ onMounted(() => {
 <style scoped>
 .chat-room {
   background: #eee;
-  height: 100vh;
   overflow-x: hidden;
   overflow-y: auto;
 }

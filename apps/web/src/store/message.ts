@@ -11,13 +11,11 @@ export const useMessageStore = defineStore('message', () => {
     msgs.push(message);
     !hasMsg && messageMap.set(message.formId, msgs);
   }
-  function removeMessage() {
-    
-  }
+  function removeMessage() {}
   function revokeMessage() {}
   function getChatMessages() {}
 
   return { addMessage };
 });
 
-export const useMessageStoreWithOut = useMessageStore(pinia);
+export const useMessageStoreWithOut = () => useMessageStore(pinia);

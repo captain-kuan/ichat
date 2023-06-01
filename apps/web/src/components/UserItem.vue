@@ -1,27 +1,32 @@
 <template>
-    <div class="user-item flex items-center">
-        <div>
-            <img class="avatar" :src="user.avatar" alt="" />
-        </div>
-        <div>{{ user.name }}</div>
+  <div class="user-item flex justify-between">
+    <div class="flex items-center">
+      <div>
+        <img class="avatar" :src="user.avatar" alt="" />
+      </div>
+      <div>{{ user.name }}</div>
     </div>
+    <slot name="right">
+      <div></div>
+    </slot>
+  </div>
 </template>
 <script setup lang="ts">
 import { defineProps } from 'vue';
 
 interface UserInfo {
-    avatar?: string;
-    name: string;
+  avatar?: string;
+  name: string;
 }
 defineProps<{ user: UserInfo }>();
 </script>
 <style lang="less" scoped>
 .user-item {
-    padding: 8px 12px;
-    .avatar {
-        width: 30px;
-        height: 30px;
-        margin-right: 20px;
-    }
+  padding: 8px 12px;
+  .avatar {
+    width: 30px;
+    height: 30px;
+    margin-right: 20px;
+  }
 }
 </style>

@@ -1,23 +1,21 @@
 <template>
-  <MainLayout>
-    <van-form>
-      <van-field label="昵称" v-model="userInfo.name"></van-field>
-      <van-field label="头像">
-        <template #input>
-          <van-uploader
-            :max-count="1"
-            :multiple="false"
-            v-model="avatar"
-            :after-read="upload"
-            :before-delete="del"
-          />
-        </template>
-      </van-field>
-      <van-cell>
-        <van-button block round type="primary" @click="submit">提交</van-button>
-      </van-cell>
-    </van-form>
-  </MainLayout>
+  <van-form>
+    <van-field label="昵称" v-model="userInfo.name"></van-field>
+    <van-field label="头像">
+      <template #input>
+        <van-uploader
+          :max-count="1"
+          :multiple="false"
+          v-model="avatar"
+          :after-read="upload"
+          :before-delete="del"
+        />
+      </template>
+    </van-field>
+    <van-cell>
+      <van-button block round type="primary" @click="submit">提交</van-button>
+    </van-cell>
+  </van-form>
 </template>
 
 <script setup lang="ts">

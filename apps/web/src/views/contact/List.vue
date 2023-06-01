@@ -1,19 +1,20 @@
 <template>
-  <main-layout>
-    <div class="home">
-      <user-item
-        v-for="user in users"
-        :user="user"
-        :key="user.id"
-        @click="goRoom(user)"
-      />
-    </div>
-  </main-layout>
+  <div class="home">
+    <user-item
+      :user="{ avatar: '', name: '新的朋友' }"
+      @click="$router.push('/contact/new-friends')"
+    ></user-item>
+    <user-item
+      v-for="user in users"
+      :user="user"
+      :key="user.id"
+      @click="goRoom(user)"
+    />
+  </div>
 </template>
 
 <script lang="ts" setup>
 import { ref } from 'vue';
-import MainLayout from '@/layouts/MainLayout.vue';
 import { useRouter, Router } from 'vue-router';
 import { getFriends } from '@/apis';
 import UserItem from '@/components/UserItem.vue';

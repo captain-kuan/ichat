@@ -24,7 +24,6 @@
 
 <script lang="ts" setup>
 import { Chat, Message } from '@ichat/types';
-import { fromNow as _fromNow } from '@/views/utils/formatData';
 
 const props = defineProps<{
   chat: Chat;
@@ -33,7 +32,7 @@ const props = defineProps<{
 }>();
 
 const fromNow = computed(() => {
-  return _fromNow(props.lastMessage?.sendTime);
+  return (props.lastMessage?.sendTime);
 });
 </script>
 

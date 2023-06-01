@@ -1,35 +1,32 @@
 <template>
-  <detail-layout>
-    <van-field
-      label="账户"
-      v-model="account"
-      placeholder="account"
-      right-icon="search"
-      @click-right-icon="search"
-    >
-    </van-field>
-    <div class="p-2">
-      <div v-for="item in result" class="flex justify-between items-center">
-        <div class="flex items-center">
-          <van-image class="avatar" :src="item.avatar"></van-image>
-          <div>
-            {{ item.account }}
-          </div>
+  <van-field
+    label="账户"
+    v-model="account"
+    placeholder="account"
+    right-icon="search"
+    @click-right-icon="search"
+  >
+  </van-field>
+  <div class="p-2">
+    <div v-for="item in result" class="flex justify-between items-center">
+      <div class="flex items-center">
+        <van-image class="avatar" :src="item.avatar"></van-image>
+        <div>
+          {{ item.account }}
         </div>
-        <van-button
-          v-if="user.id !== item.id"
-          type="primary"
-          size="small"
-          @click="addFriend(item.id)"
-          >添加</van-button
-        >
       </div>
+      <van-button
+        v-if="user.id !== item.id"
+        type="primary"
+        size="small"
+        @click="addFriend(item.id)"
+        >添加</van-button
+      >
     </div>
-  </detail-layout>
+  </div>
 </template>
 
 <script setup lang="ts">
-import DetailLayout from '@/layouts/DetailLayout.vue';
 import { searchUserByName, sendAddFriend } from '@/apis';
 import { useUserStore, storeToRefs } from '@/store';
 const { user } = storeToRefs(useUserStore());

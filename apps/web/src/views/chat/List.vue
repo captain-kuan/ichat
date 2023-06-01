@@ -1,18 +1,15 @@
 <template>
-  <main-layout>
-    <div class="home">
-      <chat-item
-        v-for="chat in chats"
-        :chat="chat"
-        :key="chat.id"
-        @touchend="goChat(chat.id)"
-      />
-    </div>
-  </main-layout>
+  <div class="home">
+    <chat-item
+      v-for="chat in chats"
+      :chat="chat"
+      :key="chat.id"
+      @touchend="goChat(chat.id)"
+    />
+  </div>
 </template>
 
 <script lang="ts" setup>
-import MainLayout from '@/layouts/MainLayout.vue';
 import ChatItem from '@/components/ChatItem.vue';
 import { useRouter, Router } from 'vue-router';
 import { Chat, ChatType } from '@ichat/types';
@@ -27,7 +24,6 @@ const goChat = (id) => {
     path: `/chat/room/${id}`,
   });
 };
-
 </script>
 
 <style lang="less" scoped></style>

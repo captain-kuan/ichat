@@ -6,7 +6,7 @@
       </template>
     </van-nav-bar>
     <main>
-      <slot></slot>
+      <router-view></router-view>
     </main>
     <footer>
       <van-tabbar placeholder route v-model="active">

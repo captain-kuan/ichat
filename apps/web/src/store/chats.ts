@@ -1,8 +1,18 @@
-import { ActiveChat, Chat, Message } from '@/types';
+import { ActiveChat, Chat, ChatType, Message } from '@/types';
+import { pinia } from '.';
 
 export const useChatsStore = defineStore('chats', () => {
-  const activeChats = computed(() => {});
   const chats = reactive<Chat[]>([]);
+
+  const groups = computed(() =>
+    chats.filter((chat) => chat.type === ChatType.group),
+  );
+  const person = computed(() =>
+    chats.filter((chat) => chat.type === ChatType.person),
+  );
+
+  const activeChats = computed(() => {});
+
   function updateActiveChat(msg: Message) {
     
   }
@@ -16,3 +26,7 @@ export const useChatsStore = defineStore('chats', () => {
 
   return { activeChats, updateActiveChat, removeChat };
 });
+
+export function useChatsStoreWithOut() {
+  return useChatsStore(pinia);
+}
