@@ -5,10 +5,10 @@
       @click="$router.push('/contact/new-friends')"
     ></user-item>
     <user-item
-      v-for="user in users"
+      v-for="user in chats"
       :user="user"
       :key="user.id"
-      @click="goRoom(user)"
+      @click="goRoom(user.friendId)"
     />
   </div>
 </template>
@@ -18,23 +18,16 @@ import { ref } from 'vue';
 import { useRouter, Router } from 'vue-router';
 import { getFriends } from '@/apis';
 import UserItem from '@/components/UserItem.vue';
+import { useChatsStore, storeToRefs } from '@/store';
+import { Chat } from '@/types';
 
-interface User {
-  id: string;
-  name: string;
-  avatar?: string;
-}
+const { fetchChats, chats } = storeToRefs(useChatsStore());
+fetchChats();
 
-const users = ref<User[]>([]);
-getFriends().then(({ code, data }) => {
-  if (code === 0) {
-    users.value = data;
-  }
-});
 const router: Router = useRouter();
-function goRoom(user: User) {
+function goRoom(userId) {
   router.push({
-    path: `/chat/room/${user.id}`,
+    path: `/chat/room/${userId}`,
   });
 }
 </script>

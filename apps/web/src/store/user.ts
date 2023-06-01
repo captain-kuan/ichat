@@ -1,6 +1,7 @@
 import { User } from '@ichat/types';
 import { authApis, LoginParams, userApis } from '@/apis';
 import { emitter } from '@/utils';
+import { pinia } from '.';
 
 export const useUserStore = defineStore('user', () => {
   const user = ref<User>({ id: '', name: '', avatar: '' });
@@ -21,3 +22,6 @@ export const useUserStore = defineStore('user', () => {
   };
   return { user, login, getUserInfo };
 });
+export function useUserStoreWiteOut() {
+  return useUserStore(pinia);
+}

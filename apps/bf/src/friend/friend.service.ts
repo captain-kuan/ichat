@@ -18,7 +18,7 @@ export class FriendService {
     return this.friendsRepository.findBy({ userId: user.id });
   }
   async addFriend(friend: AgreeFriendDto, user: User) {
-    const oldOne = await this.findOne(friend.friendId, user);
+    const oldOne = await this.findOne(friend.friendId, user.id);
     if (oldOne) {
       throw new BadRequestException('已添加该好友');
     }
@@ -27,6 +27,12 @@ export class FriendService {
       userId: user.id,
       name: friend.nickname || friend.friendId,
     });
+    const xFriend = this.friendsRepository.create({
+      friendId: user.id,
+      userId: friend.friendId,
+      name: friend.nickname || friend.friendId,
+    });
+    await this.friendsRepository.save(xFriend);
     return this.friendsRepository.save(newFriend);
   }
   sendAddFriendReq(friend: SendAddFriendDto, user: User) {
@@ -41,21 +47,21 @@ export class FriendService {
       toId: friend.friendId,
     };
   }
-  findOne(friendId: string, user: User) {
+  findOne(friendId: string, userId: User['id']) {
     return this.friendsRepository.findOneBy({
       friendId,
-      userId: user.id,
+      userId: userId,
     });
   }
   async delOne(friendId: string, user: User) {
-    const oldOne = await this.findOne(friendId, user);
+    const oldOne = await this.findOne(friendId, user.id);
     if (oldOne == null) {
       throw new BadRequestException('未找到对应id的好友');
     }
     return this.friendsRepository.delete(oldOne.id);
   }
   async updateOne(friendId: string, user: User, data: UpdateFriendDto) {
-    const oldOne = await this.findOne(friendId, user);
+    const oldOne = await this.findOne(friendId, user.id);
     if (oldOne == null) {
       throw new BadRequestException('未找到对应id的好友');
     }

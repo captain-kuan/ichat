@@ -11,4 +11,5 @@ import { useCore } from '@/hooks';
 
 const app = createApp(App);
 app.use(store).use(router).mount('#app');
-useCore();
+const { initCore } = useCore();
+initCore();

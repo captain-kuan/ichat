@@ -1,24 +1,46 @@
-import { Message, MessageEvent } from '@ichat/types';
+import { ChatType, Message, MessageEvent } from '@ichat/types';
 import { SocketClient } from '@/utils';
-import { useMessageStoreWithOut, useChatsStoreWithOut } from '@/store';
+import {
+  useMessageStoreWithOut,
+  useChatsStoreWithOut,
+  useUserStore,
+  useUserStoreWiteOut,
+} from '@/store';
 
-export async function useCore() {
-  const client = shallowRef<SocketClient>();
+const client = shallowRef<SocketClient>();
+
+export function useCore() {
+  const messageStore = useMessageStoreWithOut();
+  const chatStore = useChatsStoreWithOut();
+  const useStore = useUserStoreWiteOut();
+
   async function initCore() {
     client.value = await SocketClient.getClient();
-    const messageStore = useMessageStoreWithOut();
-    const chatStore = useChatsStoreWithOut();
+    console.log('initCore', client.value);
+
     client.value.on(MessageEvent.message, (message) => {
       messageStore.addMessage(message);
-      chatStore.updateActiveChat(message);
+      chatStore.updateActiveChatByMessage(message);
     });
     client.value.on(MessageEvent.addChat, (message) => {});
   }
-  function seenMessage(message: Message) {
+  function seenMessage(
+    message: Pick<Message, 'content' | 'toId' | 'type' | 'formId'>,
+  ) {
     if (client.value) {
-      client.value.emit(MessageEvent.message, message);
+      client.value.emit(MessageEvent.message, {
+        ...message,
+        sendId: useStore.user.id,
+      });
+      messageStore.addMessage({
+          ...message,
+          sendId: useStore.user.id,
+          id: '',
+          sendTime: new Date()
+      });
     } else {
       // TODO: 消息重发
+      console.log(client.value);
     }
   }
   return { initCore, seenMessage };

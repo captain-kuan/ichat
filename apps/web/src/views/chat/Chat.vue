@@ -20,21 +20,34 @@
 
 <script lang="ts" setup>
 import MessageItem from '@/components/MessageItem.vue';
-import { Message } from '@ichat/types';
-import { useChatsStore, useUserStore, storeToRefs } from '@/store';
+import { ChatType, Message } from '@ichat/types';
+import {
+  useChatsStore,
+  useMessageStore,
+  storeToRefs,
+  useUserStore,
+} from '@/store';
+import { useCore } from '@/hooks';
 
 const route = useRoute();
 const chatId = computed(() => route.params.id as string);
-
+const { activeChats, getChatDetail } = storeToRefs(useChatsStore());
+const chat = computed(() => getChatDetail(chatId.value));
 const input = ref('');
-const { activeChats } = storeToRefs(useChatsStore());
+const { messageMap, getChatMessages } = storeToRefs(useMessageStore());
+
+const { seenMessage } = useCore();
 const send = () => {
-  ({ content: input.value, toId: chatId.value });
+  seenMessage({
+    content: input.value,
+    toId: chatId.value,
+    formId: chatId.value,
+    type: chat.value?.type,
+  });
   input.value = '';
 };
-const messages = computed(() => {
-  return ""
-});
+const { user } = useUserStore();
+const messages = getChatMessages(chatId.value);
 
 const chatRoomRef = ref<HTMLElement>();
 

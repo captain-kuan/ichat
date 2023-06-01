@@ -1,7 +1,8 @@
+import { Chat } from '@/types';
 import request from '@/utils/request';
 
 export function getFriends() {
-  return request.get('/friend');
+  return request.get<Chat[]>('/friend');
 }
 
 export function sendAddFriend(data: { friendId: string }) {

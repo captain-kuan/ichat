@@ -1,11 +1,8 @@
-import { AuthService } from '@/auth/auth.service';
 import { User } from '@/user/entities/user.entity';
-import { UseGuards } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import {
   SubscribeMessage,
   WebSocketGateway,
-  WsResponse,
   WebSocketServer,
   OnGatewayConnection,
 } from '@nestjs/websockets';
@@ -39,15 +36,20 @@ export class MessageGateway implements OnGatewayConnection {
   @SubscribeMessage(MessageEvent.message)
   onEvent(client: Socket, payload: any): Observable<any> {
     this.sendMessage(MessageEvent.message, payload);
+    const message = {
+      formId: 'system',
+      sendId: 'system',
+      id: '',
+      type: 'system',
+      toId: payload.sendId,
+      content: '',
+      sendTime: new Date(),
+    };
     return of({
-      event: MessageEvent.message,
-      data: {
-        payload,
-        msg: `hello ${payload.sendId}!`,
-      },
+      event: MessageEvent.sendSuccess,
+      data: message,
     });
   }
-
   sendMessage(
     type,
     content: { content: string; toId: string; sendId: string },

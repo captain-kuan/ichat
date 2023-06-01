@@ -4,7 +4,7 @@
       v-for="chat in chats"
       :chat="chat"
       :key="chat.id"
-      @touchend="goChat(chat.id)"
+      @touchend="goChat(chat.friendId)"
     />
   </div>
 </template>
@@ -14,9 +14,7 @@ import ChatItem from '@/components/ChatItem.vue';
 import { useRouter, Router } from 'vue-router';
 import { Chat, ChatType } from '@ichat/types';
 
-const chats = reactive<Chat[]>([
-  { id: '1', name: '测试', type: ChatType.person, avatar: '' },
-]);
+const chats = reactive<Chat[]>([]);
 
 const router: Router = useRouter();
 const goChat = (id) => {

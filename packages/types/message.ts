@@ -8,8 +8,12 @@ export interface Message {
   content: string; //消息内容
   sendTime: Date; //发送时间
 }
-
+export interface SystemMessage extends Message {
+  formId: 'system'; //消息来源
+  sendId: "system"; //消息发送者
+}
 export const enum MessageEvent {
   message = 'message',
   addChat = 'addChat',
+  sendSuccess = 'sendSuccess',
 }

@@ -3,41 +3,37 @@ import { Message, MessageEvent } from '@ichat/types';
 import { useLoginCallBack } from '@/hooks';
 
 type Handler = (data: Message) => void;
+let client: SocketClient;
 export class SocketClient {
   #messageHandlers: Map<MessageEvent, Set<Handler>>;
   socket: Socket;
-  static socketPath: 'ws://localhost:3001';
-  static client: SocketClient;
   static connected: true;
-  constructor(socketPath: string, token: string) {
+  constructor(token: string) {
     this.#messageHandlers = new Map();
-    this.socket = io(socketPath, { auth: { token } });
+    this.socket = io('ws://localhost:3001', { auth: { token } });
     this.socket.on('connect', () => {
       console.log('connected');
       SocketClient.connected = true;
-      SocketClient.client.addMessageHandle();
+      client.addMessageHandle();
     });
   }
   static getClient(): Promise<SocketClient> {
     return new Promise((resolve) => {
       useLoginCallBack((token) => {
-        if (!SocketClient.client) {
-          SocketClient.client = new SocketClient(
-            SocketClient.socketPath,
-            token,
-          );
+        if (!client) {
+          client = new SocketClient(token);
         }
         if (SocketClient.connected) {
-          return resolve(SocketClient.client);
+          return resolve(client);
         }
-        SocketClient.client.socket.on('connect', () => {
-          resolve(SocketClient.client);
+        client.socket.on('connect', () => {
+          resolve(client);
         });
       });
     });
   }
   private addMessageHandle() {
-    const events = [MessageEvent.message, MessageEvent.addFriend];
+    const events = [MessageEvent.message, MessageEvent.addChat];
     for (const event of events) {
       this.socket.on(event, (data) => {
         const handlers = this.#messageHandlers.get(event);

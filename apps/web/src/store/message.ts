@@ -1,21 +1,34 @@
 import { pinia } from '.';
-import { Message } from '@/types';
+import { Chat, Message } from '@/types';
+import { useUserStore } from '@/store';
 
 export const useMessageStore = defineStore('message', () => {
-  const messageMap = reactive<Map<string, Message[]>>(new Map());
+  const messageMap = reactive<Record<Chat['id'], Message[] | null>>({});
   function pullMessage() {}
   function restore() {}
   function addMessage(message: Message) {
-    const hasMsg = messageMap.has(message.formId);
-    const msgs = hasMsg ? messageMap.get(message.formId) : [];
+    const hasMsg = messageMap[message.formId] == null;
+    const msgs = hasMsg ? messageMap[message.formId] : [];
     msgs.push(message);
-    !hasMsg && messageMap.set(message.formId, msgs);
+    if (!hasMsg) messageMap[message.formId] = msgs;
   }
   function removeMessage() {}
   function revokeMessage() {}
-  function getChatMessages() {}
+  const { user } = useUserStore();
 
-  return { addMessage };
+  function getChatMessages(chatId: Chat['id']) {
+    const hasMsg = messageMap[chatId] != null;
+    const msgs = hasMsg ? messageMap[chatId] : [];
+    if (!hasMsg) messageMap[chatId] = [];
+    return computed(() =>
+      msgs.map((msg) => ({
+        ...msg,
+        isSelf: msg.sendId === user.id,
+      })),
+    );
+  }
+
+  return { addMessage, getChatMessages, messageMap };
 });
 
 export const useMessageStoreWithOut = () => useMessageStore(pinia);

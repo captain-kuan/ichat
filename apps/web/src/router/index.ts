@@ -6,6 +6,7 @@ const router = createRouter({
     {
       path: '/',
       component: IndexVue,
+      redirect:'/chat',
       children: [
         ...routes,
         {

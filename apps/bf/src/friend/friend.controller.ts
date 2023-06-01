@@ -8,7 +8,6 @@ import {
   Param,
   Patch,
   Post,
-  Query,
 } from '@nestjs/common';
 import {
   ApiBearerAuth,
@@ -56,7 +55,7 @@ export class FriendController {
   @ApiParam({ name: 'id', description: '好友id' })
   @ApiOperation({ summary: '根据id获取好友', description: '返回好友id' })
   getFriendsById(@Param('id') id: string, @CurrentUser() user: User) {
-    return this.friendService.findOne(id, user);
+    return this.friendService.findOne(id, user.id);
   }
 
   @Delete(':id')
