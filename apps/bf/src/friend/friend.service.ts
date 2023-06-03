@@ -15,7 +15,16 @@ export class FriendService {
     private readonly ws: MessageGateway,
   ) {}
   findAll(user: User) {
-    return this.friendsRepository.findBy({ userId: user.id });
+    const query = this.friendsRepository.createQueryBuilder('friend');
+    return query
+      .leftJoinAndMapOne(
+        'friend.info',
+        User,
+        'user',
+        'user.id = friend.friendId',
+      )
+      .where('friend.userId = :id', { id: user.id })
+      .getMany();
   }
   async addFriend(friend: AgreeFriendDto, user: User) {
     const oldOne = await this.findOne(friend.friendId, user.id);

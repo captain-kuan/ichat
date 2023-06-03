@@ -5,15 +5,28 @@
         {{ message.content }}
       </p>
     </div>
-    <van-image class="header" />
+    <van-image class="header" :src="avatar" />
   </div>
 </template>
 
 <script lang="ts" setup>
-import { Message } from '@ichat/types';
-defineProps<{
-  message: Pick<Message & { isSelf: boolean }, 'content' | 'isSelf'>;
+import { ChatType, Message } from '@ichat/types';
+import { useChatsStore, useUserStore } from '@/store';
+const props = defineProps<{
+  message: Message & { isSelf: boolean };
 }>();
+const { chats } = useChatsStore();
+const { user } = storeToRefs(useUserStore());
+
+const avatar = computed(() => {
+  const message = props.message;
+  const isSelf = message.isSelf;
+  if (isSelf) return user.value.avatar;
+  if (message.type === ChatType.person) {
+    const sender = chats.find((item) => item.friendId === message.sendId);
+    return sender?.info?.avatar || '';
+  }
+});
 </script>
 
 <style lang="less" scoped>

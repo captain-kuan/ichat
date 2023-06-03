@@ -21,15 +21,15 @@
 <script setup lang="ts">
 import { showToast } from 'vant';
 import request from '@/utils/request';
-import MainLayout from '@/layouts/MainLayout.vue';
-import { getUserInfo, changeUserInfo } from '@/apis';
+import { changeUserInfo } from '@/apis';
+import { useUserStore, storeToRefs } from '@/store';
+
+const { getUserInfo, user } = storeToRefs(useUserStore());
 const avatar = computed({
   get() {
     return userInfo.value.avatar ? [{ url: userInfo.value.avatar }] : [];
   },
   set(v) {
-    console.log(v);
-
     userInfo.value.avatar = v[0]?.url;
   },
 });
@@ -41,8 +41,8 @@ const userInfo = ref<{ name: string; avatar: string }>({
   name: '',
 });
 const init = async () => {
-  const { code, data, msg } = await getUserInfo();
-  userInfo.value = data;
+  await getUserInfo();
+  userInfo.value = user.value;
 };
 init();
 const submit = async () => {

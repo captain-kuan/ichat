@@ -14,7 +14,6 @@ export class SocketClient {
     this.socket.on('connect', () => {
       console.log('connected');
       SocketClient.connected = true;
-      client.addMessageHandle();
     });
   }
   static getClient(): Promise<SocketClient> {
@@ -32,36 +31,10 @@ export class SocketClient {
       });
     });
   }
-  private addMessageHandle() {
-    const events = [MessageEvent.message, MessageEvent.addChat];
-    for (const event of events) {
-      this.socket.on(event, (data) => {
-        const handlers = this.#messageHandlers.get(event);
-        if (handlers) {
-          handlers.forEach((handler) => {
-            handler(data);
-          });
-        }
-      });
-    }
-  }
-  public emit(type: MessageEvent, data: Omit<Message, 'id' | 'sendTime'>) {
-    this.socket.emit(type, data);
+  emit(type: MessageEvent, data: Omit<Message, 'id' | 'sendTime'>) {
+    this.socket.emit(type, { ...data, sendTime: new Date() });
   }
   on(type: MessageEvent, handler: Handler) {
-    const handlers = this.#messageHandlers.get(type);
-    if (handlers) {
-      handlers.add(handler);
-    } else {
-      const hs = new Set<Handler>();
-      hs.add(handler);
-      this.#messageHandlers.set(type, hs);
-    }
-  }
-  unsubscribe(type: MessageEvent, handler: Handler) {
-    const handlers = this.#messageHandlers.get(type);
-    if (handlers) {
-      handlers.delete(handler);
-    }
+    this.socket.on(type, handler);
   }
 }

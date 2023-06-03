@@ -1,34 +1,35 @@
 import { pinia } from '.';
-import { Chat, Message } from '@/types';
+import { Chat, ChatType, Message, PersonMessage } from '@/types';
 import { useUserStore } from '@/store';
 
 export const useMessageStore = defineStore('message', () => {
+  const { user } = useUserStore();
+
   const messageMap = reactive<Record<Chat['id'], Message[] | null>>({});
+  function initMessage(chatId: string) {
+    messageMap[chatId] = [];
+    console.log('init', chatId, messageMap[chatId]);
+  }
   function pullMessage() {}
   function restore() {}
   function addMessage(message: Message) {
-    const hasMsg = messageMap[message.formId] == null;
-    const msgs = hasMsg ? messageMap[message.formId] : [];
-    msgs.push(message);
-    if (!hasMsg) messageMap[message.formId] = msgs;
+    switch (message.type) {
+      // 如果是收到的私人消息，更新发送者的消息列表
+      case ChatType.person:
+        let chatId = message.sendId === user.id ? message.toId : message.sendId;
+        const hasMsg = messageMap[chatId] != null;
+        const msgs = hasMsg ? messageMap[chatId] : [];
+        msgs.push(message);
+        if (!hasMsg) messageMap[chatId] = msgs;
+        break;
+      default:
+        throw Error('not impl');
+    }
   }
   function removeMessage() {}
   function revokeMessage() {}
-  const { user } = useUserStore();
 
-  function getChatMessages(chatId: Chat['id']) {
-    const hasMsg = messageMap[chatId] != null;
-    const msgs = hasMsg ? messageMap[chatId] : [];
-    if (!hasMsg) messageMap[chatId] = [];
-    return computed(() =>
-      msgs.map((msg) => ({
-        ...msg,
-        isSelf: msg.sendId === user.id,
-      })),
-    );
-  }
-
-  return { addMessage, getChatMessages, messageMap };
+  return { initMessage, addMessage, messageMap };
 });
 
 export const useMessageStoreWithOut = () => useMessageStore(pinia);

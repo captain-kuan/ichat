@@ -1,7 +1,13 @@
 <template>
-  <div class="min-h-screen flex flex-col">
-    <van-nav-bar :title="title" left-arrow @click-left="back"></van-nav-bar>
-    <main class="flex-1 main flex flex-col">
+  <div class="h-screen flex flex-col overflow-auto">
+    <van-nav-bar
+      class="top-0"
+      style="position: sticky"
+      :title="title"
+      left-arrow
+      @click-left="back"
+    />
+    <main class="main flex flex-col">
       <router-view></router-view>
     </main>
   </div>
@@ -22,4 +28,8 @@ const back = () => {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.main {
+  height: calc(100vh - 46px);
+}
+</style>

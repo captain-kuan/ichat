@@ -2,9 +2,9 @@
   <div class="user-item flex justify-between">
     <div class="flex items-center">
       <div>
-        <img class="avatar" :src="user.avatar" alt="" />
+        <img class="avatar" :src="user.info?.avatar" alt="" />
       </div>
-      <div>{{ user.name }}</div>
+      <div>{{ user.info?.name }}</div>
     </div>
     <slot name="right">
       <div></div>
@@ -12,13 +12,10 @@
   </div>
 </template>
 <script setup lang="ts">
+import { Chat } from '@/types';
 import { defineProps } from 'vue';
 
-interface UserInfo {
-  avatar?: string;
-  name: string;
-}
-defineProps<{ user: UserInfo }>();
+defineProps<{ user: Chat }>();
 </script>
 <style lang="less" scoped>
 .user-item {

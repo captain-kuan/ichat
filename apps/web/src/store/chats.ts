@@ -4,34 +4,37 @@ import { getFriends } from '@/apis';
 import { useUserStore } from '@/store';
 export const useChatsStore = defineStore('chats', () => {
   const { user } = useUserStore();
-  const chats = reactive<Chat[]>([]);
+  const chats = ref<Chat[]>([]);
   function fetchChats() {
     getFriends().then(({ code, data }) => {
       if (code === 0) {
-        chats.length = 0;
-        chats.push(...data);
+        chats.value=data;
       }
     });
   }
   const groups = computed(() =>
-    chats.filter((chat) => chat.type === ChatType.group),
+    chats.value.filter((chat) => chat.type === ChatType.group),
   );
   const person = computed(() =>
-    chats.filter((chat) => chat.type === ChatType.person),
+    chats.value.filter((chat) => chat.type === ChatType.person),
   );
 
   const activeChats = computed(() => {});
 
   const lastChats = reactive<Set<ActiveChat>>(new Set());
-  function updateActiveChatByMessage(msg: Message) {
-    const chatId = msg.sendId === user.id ? msg.formId : msg.toId;
+  function updateActiveChat(chatId: string, msg?: Message) {
     const chat = getChatDetail(chatId) as ActiveChat;
+    if (chat == null) return;
     lastChats.add(chat);
-    chat.lastMsg = msg;
+    if (msg) chat.lastMsg = msg;
   }
-  function getChatDetail(chatId: Chat['id']): Chat | null {
-    console.log(chats,chatId);
-    return chats.find((item) => item.id === chatId) as Chat | null;
+  function getChatDetail(chatId: Chat['id']) {
+    console.log(chats, chatId);
+    const res = chats.value.find((item) => item.id === chatId) as Chat | null;
+    if (res == null) {
+      console.error('not find');
+    }
+    return res;
   }
   function hideChat(chat) {}
   function removeChat(chat) {
@@ -45,7 +48,7 @@ export const useChatsStore = defineStore('chats', () => {
     fetchChats,
     activeChats,
     getChatDetail,
-    updateActiveChatByMessage,
+    updateActiveChat,
     removeChat,
   };
 });

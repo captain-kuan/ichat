@@ -14,9 +14,9 @@ import { MessageEvent } from '@ichat/types';
 export class MessageGateway implements OnGatewayConnection {
   @WebSocketServer()
   server: Server;
-  users: Map<string, string>;
+  chats: Map<string, string>;
   constructor(private jwtService: JwtService) {
-    this.users = new Map();
+    this.chats = new Map();
   }
   async handleConnection(client: Socket) {
     const token = client.handshake.auth.token;
@@ -26,7 +26,7 @@ export class MessageGateway implements OnGatewayConnection {
       if (!user) {
         client.disconnect();
       } else {
-        this.users.set(String(user.id), client.id);
+        this.chats.set(String(user.id), client.id);
       }
     } catch (error) {
       console.log(error);
@@ -34,10 +34,11 @@ export class MessageGateway implements OnGatewayConnection {
     }
   }
   @SubscribeMessage(MessageEvent.message)
-  onEvent(client: Socket, payload: any): Observable<any> {
-    this.sendMessage(MessageEvent.message, payload);
+  async onEvent(client: Socket, payload: any): Promise<Observable<any>> {
+    const flag = await this.sendMessage(MessageEvent.message, payload);
+
     const message = {
-      formId: 'system',
+      chatId: 'system',
       sendId: 'system',
       id: '',
       type: 'system',
@@ -46,7 +47,7 @@ export class MessageGateway implements OnGatewayConnection {
       sendTime: new Date(),
     };
     return of({
-      event: MessageEvent.sendSuccess,
+      event: flag ? MessageEvent.sendSuccess : MessageEvent.offline,
       data: message,
     });
   }
@@ -54,12 +55,17 @@ export class MessageGateway implements OnGatewayConnection {
     type,
     content: { content: string; toId: string; sendId: string },
   ) {
-    const clientId = this.users.get(content.toId);
-    if (clientId) {
-      this.server.to(clientId).emit(type, { ...content, sendTime: new Date() });
-    } else {
-      console.log(content.toId + '不在线');
-    }
-    return content;
+    return new Promise((resolve) => {
+      const clientId = this.chats.get(content.toId);
+      if (clientId) {
+        this.server
+          .to(clientId)
+          .emit(type, { ...content, sendTime: new Date() }, () => {
+            resolve(true);
+          });
+      } else {
+        resolve(false);
+      }
+    });
   }
 }

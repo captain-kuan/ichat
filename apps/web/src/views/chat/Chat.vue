@@ -31,23 +31,32 @@ import { useCore } from '@/hooks';
 
 const route = useRoute();
 const chatId = computed(() => route.params.id as string);
-const { activeChats, getChatDetail } = storeToRefs(useChatsStore());
-const chat = computed(() => getChatDetail(chatId.value));
+const { getChatDetail, chats } = storeToRefs(useChatsStore());
 const input = ref('');
-const { messageMap, getChatMessages } = storeToRefs(useMessageStore());
+const { messageMap } = storeToRefs(useMessageStore());
+const { seedMessage } = useCore();
 
-const { seenMessage } = useCore();
+const { user } = useUserStore();
+
 const send = () => {
-  seenMessage({
+  seedMessage({
     content: input.value,
     toId: chatId.value,
-    formId: chatId.value,
-    type: chat.value?.type,
+    type: ChatType.person,
+    id: '',
+    sendId: user.id,
+    sendTime: new Date(),
   });
   input.value = '';
 };
-const { user } = useUserStore();
-const messages = getChatMessages(chatId.value);
+
+const messages = computed(() => {
+  
+  return messageMap.value[chatId.value].map((msg) => ({
+    ...msg,
+    isSelf: msg.sendId === user.id,
+  }));
+});
 
 const chatRoomRef = ref<HTMLElement>();
 

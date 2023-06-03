@@ -4,7 +4,7 @@
       v-for="chat in chats"
       :chat="chat"
       :key="chat.id"
-      @touchend="goChat(chat.friendId)"
+      @touchend="goChat(chat.id)"
     />
   </div>
 </template>

@@ -8,7 +8,5 @@
 <script lang="ts" setup>
 import { Chat, ChatType } from '@/types';
 import UserItem from '@/components/UserItem.vue';
-const newFriends = reactive<Chat[]>([
-  { id: '', avatar: '', type: ChatType.person, name: 'hello' },
-]);
+const newFriends = reactive<Chat[]>([]);
 </script>

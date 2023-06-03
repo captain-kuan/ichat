@@ -7,7 +7,7 @@ import {
   useUserStoreWiteOut,
 } from '@/store';
 
-const client = shallowRef<SocketClient>();
+let client: SocketClient;
 
 export function useCore() {
   const messageStore = useMessageStoreWithOut();
@@ -15,33 +15,26 @@ export function useCore() {
   const useStore = useUserStoreWiteOut();
 
   async function initCore() {
-    client.value = await SocketClient.getClient();
-    console.log('initCore', client.value);
-
-    client.value.on(MessageEvent.message, (message) => {
+    client = await SocketClient.getClient();
+    client.on(MessageEvent.message, (message) => {
       messageStore.addMessage(message);
-      chatStore.updateActiveChatByMessage(message);
     });
-    client.value.on(MessageEvent.addChat, (message) => {});
+    client.on(MessageEvent.sendSuccess, (message) => {});
+    client.on(MessageEvent.addChat, (message) => {});
   }
-  function seenMessage(
-    message: Pick<Message, 'content' | 'toId' | 'type' | 'formId'>,
-  ) {
-    if (client.value) {
-      client.value.emit(MessageEvent.message, {
+
+  function seedMessage(message: Message) {
+    if (client) {
+      client.emit(MessageEvent.message, {
         ...message,
         sendId: useStore.user.id,
       });
-      messageStore.addMessage({
-          ...message,
-          sendId: useStore.user.id,
-          id: '',
-          sendTime: new Date()
-      });
+      messageStore.addMessage(message);
+      chatStore.updateActiveChat(message.toId);
     } else {
       // TODO: 消息重发
-      console.log(client.value);
+      console.log(client);
     }
   }
-  return { initCore, seenMessage };
+  return { initCore, seedMessage };
 }

@@ -1,13 +1,16 @@
 export enum ChatType {
-  group,
-  person,
-  system,
+  group = 'g',
+  person = 'p',
+  system = 's',
 }
 
 export interface Chat {
   id: string;
   name: string;
-  avatar: string;
+  info: {
+    avatar: string;
+    name: string;
+  };
   friendId: string;
   type: ChatType; //聊天对象类型
   isConcern?: boolean; //关注

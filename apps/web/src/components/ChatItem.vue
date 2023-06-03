@@ -1,7 +1,7 @@
 <template>
   <van-swipe-cell>
     <div class="room-item flex items-center">
-      <van-image class="avatar" :src="chat.avatar"></van-image>
+      <van-image class="avatar" :src="chat.info.avatar"></van-image>
       <div class="content-box">
         <div class="content">
           <p class="title">{{ chat.name }}</p>
@@ -32,7 +32,7 @@ const props = defineProps<{
 }>();
 
 const fromNow = computed(() => {
-  return (props.lastMessage?.sendTime);
+  return props.lastMessage?.sendTime;
 });
 </script>
 
