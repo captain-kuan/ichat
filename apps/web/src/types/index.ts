@@ -23,4 +23,4 @@ export interface RootState {
   user: UserSelf;
 }
 
-export type ActiveChat = Chat & { lastMsg: Message };
+export type ActiveChat = Chat & { lastMsg?: Message };

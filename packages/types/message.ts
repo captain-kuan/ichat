@@ -1,4 +1,4 @@
-import { ChatType } from '.';
+import { ChatType } from './chat';
 export interface BasicMessage {
   id: string;
   type: ChatType; //消息类型

@@ -9,6 +9,7 @@ import {
 import { Server, Socket } from 'socket.io';
 import { Observable, of } from 'rxjs';
 import { MessageEvent } from '@ichat/types';
+import { ChatType } from '@/types';
 
 @WebSocketGateway(3001, { cors: true })
 export class MessageGateway implements OnGatewayConnection {
@@ -53,14 +54,35 @@ export class MessageGateway implements OnGatewayConnection {
   }
   sendMessage(
     type,
-    content: { content: string; toId: string; sendId: string },
+    message: {
+      content: string;
+      toId: string;
+      sendId: string;
+      type: ChatType;
+    },
+  ) {
+    switch (message.type) {
+      case ChatType.person:
+        return this.sendMessageToUser(type, message);
+      default:
+        throw Error(`not impl send this ${message.type} type message`);
+    }
+  }
+  sendMessageToUser(
+    msgType,
+    content: {
+      content: string;
+      toId: string;
+      sendId: string;
+      type: ChatType;
+    },
   ) {
     return new Promise((resolve) => {
       const clientId = this.chats.get(content.toId);
       if (clientId) {
         this.server
           .to(clientId)
-          .emit(type, { ...content, sendTime: new Date() }, () => {
+          .emit(msgType, { ...content, sendTime: new Date() }, () => {
             resolve(true);
           });
       } else {

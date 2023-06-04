@@ -1,23 +1,30 @@
 <template>
   <div class="home">
-    <chat-item
-      v-for="chat in chats"
-      :chat="chat"
-      :key="chat.id"
-      @touchend="goChat(chat.id)"
-    />
+    <div v-if="activeChats.length">
+      <chat-item
+        v-for="chat in activeChats"
+        :chat="chat"
+        :last-message="chat.lastMsg"
+        :key="chat.id"
+        @touchend="goChat(chat.friendId)"
+      />
+    </div>
+    <div v-else>
+      empty
+    </div>
   </div>
 </template>
 
 <script lang="ts" setup>
 import ChatItem from '@/components/ChatItem.vue';
 import { useRouter, Router } from 'vue-router';
-import { Chat, ChatType } from '@ichat/types';
+import { useChatsStore, storeToRefs } from '@/store';
 
-const chats = reactive<Chat[]>([]);
+const { activeChats, updateActiveChat } = storeToRefs(useChatsStore());
 
 const router: Router = useRouter();
 const goChat = (id) => {
+  updateActiveChat(id);
   router.push({
     path: `/chat/room/${id}`,
   });

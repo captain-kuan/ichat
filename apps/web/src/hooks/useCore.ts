@@ -18,6 +18,7 @@ export function useCore() {
     client = await SocketClient.getClient();
     client.on(MessageEvent.message, (message) => {
       messageStore.addMessage(message);
+      chatStore.updateActiveChat(message.sendId,message);
     });
     client.on(MessageEvent.sendSuccess, (message) => {});
     client.on(MessageEvent.addChat, (message) => {});
@@ -30,7 +31,7 @@ export function useCore() {
         sendId: useStore.user.id,
       });
       messageStore.addMessage(message);
-      chatStore.updateActiveChat(message.toId);
+      chatStore.updateActiveChat(message.toId,message);
     } else {
       // TODO: 消息重发
       console.log(client);

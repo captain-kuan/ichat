@@ -1,10 +1,10 @@
 <template>
   <van-swipe-cell>
     <div class="room-item flex items-center">
-      <van-image class="avatar" :src="chat.info.avatar"></van-image>
+      <van-image class="avatar" :src="chat.info?.avatar"></van-image>
       <div class="content-box">
         <div class="content">
-          <p class="title">{{ chat.name }}</p>
+          <p class="title">{{ chat.info?.name }}</p>
           <p class="message">{{ lastMessage?.content }}</p>
         </div>
         <div class="status">
@@ -24,15 +24,18 @@
 
 <script lang="ts" setup>
 import { Chat, Message } from '@ichat/types';
+import { dayjs } from '@/utils';
 
 const props = defineProps<{
   chat: Chat;
   lastMessage?: Message;
   other?: any;
 }>();
+console.log(props.chat);
 
 const fromNow = computed(() => {
-  return props.lastMessage?.sendTime;
+  if (props.lastMessage == null) return '';
+  return dayjs(props.lastMessage?.sendTime).fromNow();
 });
 </script>
 

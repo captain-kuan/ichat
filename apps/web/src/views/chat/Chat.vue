@@ -30,7 +30,7 @@ import {
 import { useCore } from '@/hooks';
 
 const route = useRoute();
-const chatId = computed(() => route.params.id as string);
+const chatId = route.params.id as string;
 const { getChatDetail, chats } = storeToRefs(useChatsStore());
 const input = ref('');
 const { messageMap } = storeToRefs(useMessageStore());
@@ -41,7 +41,7 @@ const { user } = useUserStore();
 const send = () => {
   seedMessage({
     content: input.value,
-    toId: chatId.value,
+    toId: chatId,
     type: ChatType.person,
     id: '',
     sendId: user.id,
@@ -51,8 +51,11 @@ const send = () => {
 };
 
 const messages = computed(() => {
-  
-  return messageMap.value[chatId.value].map((msg) => ({
+  if (messageMap.value[chatId] == null) {
+    console.error('message chat not find');
+    return [];
+  }
+  return messageMap.value[chatId].map((msg) => ({
     ...msg,
     isSelf: msg.sendId === user.id,
   }));

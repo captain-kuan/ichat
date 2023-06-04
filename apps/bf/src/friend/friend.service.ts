@@ -6,6 +6,7 @@ import { Repository } from 'typeorm';
 import { SendAddFriendDto, AgreeFriendDto } from './dto/create-firend.dto';
 import { UpdateFriendDto } from './dto/update-friend.dto';
 import { Friend } from './entities/friend.entity';
+import { ChatType } from '@/types';
 
 @Injectable()
 export class FriendService {
@@ -45,10 +46,11 @@ export class FriendService {
     return this.friendsRepository.save(newFriend);
   }
   sendAddFriendReq(friend: SendAddFriendDto, user: User) {
-    this.ws.sendMessage('addFriend', {
+    this.ws.sendMessage('addChat', {
       content: friend.friendId,
       sendId: user.id,
       toId: friend.friendId,
+      type: ChatType.system,
     });
     return {
       content: friend.friendId,
