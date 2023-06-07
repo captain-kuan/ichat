@@ -7,18 +7,23 @@ export const contactRoute: RouteRecordRaw = {
   children: [
     {
       path: 'list',
-      meta: { isAuth: false, pageType: 'main' },
+      meta: { isAuth: true, pageType: 'main' },
       component: () => import('@/views/contact/List.vue'),
     },
     {
       path: 'add',
-      meta: { isAuth: false, title: '添加好友' },
+      meta: { isAuth: true, title: '添加好友' },
       component: () => import('@/views/contact/Add.vue'),
     },
     {
       path: 'new-friends',
-      meta: { isAuth: false, title: '添加好友' },
+      meta: { isAuth: true, title: '添加好友' },
       component: () => import('@/views/contact/NewFriends.vue'),
+    },
+    {
+      path: 'join-group',
+      meta: { isAuth: true, title: '发起群聊' },
+      component: () => import('@/views/contact/JoinGroup.vue'),
     },
   ],
 };

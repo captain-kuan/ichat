@@ -1,8 +1,17 @@
 <template>
   <div class="page">
-    <van-nav-bar title="IChat" left-arrow @click="addFriend">
+    <van-nav-bar title="IChat" left-arrow>
       <template #right>
-        <van-icon name="add-o"></van-icon>
+        <van-popover
+          v-model:show="showPopover"
+          :actions="actions"
+          @select="onSelect"
+          placement="bottom-end"
+        >
+          <template #reference>
+            <van-icon name="add-o"></van-icon>
+          </template>
+        </van-popover>
       </template>
     </van-nav-bar>
     <main>
@@ -25,9 +34,23 @@ import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 const active = ref(0);
 const router = useRouter();
-const addFriend = () => {
-  router.push('/contact/add');
-};
+const showPopover = ref(false);
+
+const actions = [
+  { text: '发起群聊', command: 'joinGroup' },
+  { text: '添加朋友', command: 'addFriend' },
+] as const;
+
+function onSelect(action: (typeof actions)[number]) {
+  switch (action.command) {
+    case 'addFriend':
+      router.push('/contact/add');
+      break;
+    case 'joinGroup':
+      router.push('/contact/join-group');
+      break;
+  }
+}
 </script>
 
 <style scoped>
