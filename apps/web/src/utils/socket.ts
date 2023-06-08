@@ -1,13 +1,12 @@
 import { io, Socket } from 'socket.io-client';
 import { Message, MessageEvent } from '@ichat/types';
-import { useLoginCallBack } from '@/hooks';
 
 type Handler = (data: Message) => void;
 let client: SocketClient;
 export class SocketClient {
   #messageHandlers: Map<MessageEvent, Set<Handler>>;
   socket: Socket;
-  static connected: true;
+  static connected: boolean;
   constructor(token: string) {
     this.#messageHandlers = new Map();
     this.socket = io('ws://localhost:3001', { auth: { token } });
@@ -16,9 +15,8 @@ export class SocketClient {
       SocketClient.connected = true;
     });
   }
-  static getClient(): Promise<SocketClient> {
+  static getClient(token): Promise<SocketClient> {
     return new Promise((resolve) => {
-      useLoginCallBack((token) => {
         if (!client) {
           client = new SocketClient(token);
         }
@@ -28,7 +26,7 @@ export class SocketClient {
         client.socket.on('connect', () => {
           resolve(client);
         });
-      });
+      
     });
   }
   emit(type: MessageEvent, data: Omit<Message, 'id' | 'sendTime'>) {
@@ -38,3 +36,4 @@ export class SocketClient {
     this.socket.on(type, handler);
   }
 }
+  

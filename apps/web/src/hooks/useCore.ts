@@ -6,22 +6,24 @@ import {
   useUserStore,
   useUserStoreWiteOut,
 } from '@/store';
-
-let client: SocketClient;
+import { useLoginCallBack } from '@/hooks';
 
 export function useCore() {
+  let client: SocketClient;
   const messageStore = useMessageStoreWithOut();
   const chatStore = useChatsStoreWithOut();
   const useStore = useUserStoreWiteOut();
 
-  async function initCore() {
-    client = await SocketClient.getClient();
-    client.on(MessageEvent.message, (message) => {
-      messageStore.addMessage(message);
-      chatStore.updateActiveChat(message.sendId,message);
+  function initCore() {
+    useLoginCallBack(async (token) => {
+      client = await SocketClient.getClient(token);
+      client.on(MessageEvent.message, (message) => {
+        messageStore.addMessage(message);
+        chatStore.updateActiveChat(message.sendId, message);
+      });
+      client.on(MessageEvent.sendSuccess, (message) => {});
+      client.on(MessageEvent.addChat, (message) => {});
     });
-    client.on(MessageEvent.sendSuccess, (message) => {});
-    client.on(MessageEvent.addChat, (message) => {});
   }
 
   function seedMessage(message: Message) {
@@ -31,7 +33,7 @@ export function useCore() {
         sendId: useStore.user.id,
       });
       messageStore.addMessage(message);
-      chatStore.updateActiveChat(message.toId,message);
+      chatStore.updateActiveChat(message.toId, message);
     } else {
       // TODO: 消息重发
       console.log(client);
