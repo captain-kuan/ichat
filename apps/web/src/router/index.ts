@@ -1,12 +1,14 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import routes from './routes';
 import IndexVue from '@/layouts/Index.vue';
+import { useGuard } from './guard';
+
 const router = createRouter({
   routes: [
     {
       path: '/',
       component: IndexVue,
-      redirect:'/chat',
+      redirect: '/chat',
       children: [
         ...routes,
         {
@@ -29,5 +31,7 @@ const router = createRouter({
   ],
   history: createWebHistory(),
 });
+
+useGuard(router);
 
 export default router;

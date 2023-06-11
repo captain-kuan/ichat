@@ -14,6 +14,7 @@
     "@ichat/models": "workspace:^1.0.0",
     "@ichat/types": "workspace:^1.0.0",
     "@ichat/utils": "workspace:^1.0.0",
+    "@types/wavesurfer.js": "^6.0.6",
     "@vueuse/core": "^9.8.2",
     "autoprefixer": "^10.4.0",
     "axios": "^0.24.0",
@@ -26,7 +27,8 @@
     "socket.io-client": "^4.5.4",
     "vant": "^4.4.1",
     "vue": "^3.0.5",
-    "vue-router": "^4.0.10"
+    "vue-router": "^4.0.10",
+    "wavesurfer.js": "^6.6.4"
   },
   "devDependencies": {
     "@types/node": "^18.11.18",
