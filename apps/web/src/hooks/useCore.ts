@@ -8,8 +8,8 @@ import {
 } from '@/store';
 import { useLoginCallBack } from '@/hooks';
 
+let client: SocketClient;
 export function useCore() {
-  let client: SocketClient;
   const messageStore = useMessageStoreWithOut();
   const chatStore = useChatsStoreWithOut();
   const useStore = useUserStoreWiteOut();
@@ -26,7 +26,7 @@ export function useCore() {
     });
   }
 
-  function seedMessage(message: Message) {
+  function sendMessage(message: Message) {
     if (client) {
       client.emit(MessageEvent.message, {
         ...message,
@@ -39,5 +39,5 @@ export function useCore() {
       console.log(client);
     }
   }
-  return { initCore, seedMessage };
+  return { initCore, sendMessage };
 }

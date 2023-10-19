@@ -34,12 +34,12 @@ const chatId = route.params.id as string;
 const { getChatDetail, chats } = storeToRefs(useChatsStore());
 const input = ref('');
 const { messageMap } = storeToRefs(useMessageStore());
-const { seedMessage } = useCore();
+const { sendMessage } = useCore();
 
 const { user } = useUserStore();
 
 const send = () => {
-  seedMessage({
+  sendMessage({
     content: input.value,
     toId: chatId,
     type: ChatType.person,
