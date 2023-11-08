@@ -1,6 +1,6 @@
 <template>
   <div class="chat-room flex-1 reactive flex flex-col" ref="chatRoomRef">
-    <div class="flex-1 p-1">
+    <div class="flex-1 p-2">
       <message-item v-for="msg in messages" :message="msg"> </message-item>
     </div>
     <div class="sticky bottom-0">

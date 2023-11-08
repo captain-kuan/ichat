@@ -36,8 +36,8 @@ const avatar = computed(() => {
   line-height: 1.5;
   flex-direction: row-reverse;
   .header {
-    width: 60px;
-    height: 60px;
+    width: 55px;
+    height: 55px;
     margin: 0 20px 0 0;
   }
 
@@ -52,7 +52,7 @@ const avatar = computed(() => {
     .message {
       @box-color: #fff;
       flex: 1;
-      min-height: 60px;
+      min-height: 30px;
       background-color: @box-color;
       padding: 10px;
       color: #666;
@@ -62,7 +62,7 @@ const avatar = computed(() => {
       &:after {
         content: '';
         top: 10px;
-        left: 0;
+        left: 1px;
         transform: translateX(-100%);
         border: transparent solid 10px;
         border-right-color: @box-color;
@@ -88,7 +88,7 @@ const avatar = computed(() => {
       &:after {
         content: '';
         top: 10px;
-        right: 0;
+        right: 1px;
         transform: translateX(100%);
         border: transparent solid 10px;
         border-left-color: @box-color;
