@@ -1,20 +1,34 @@
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { ChatType } from '@/types';
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
+@Entity()
 export class Message {
-  @PrimaryGeneratedColumn()
-  id: number;
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
+
+  @Column({ type: 'text' })
+  content: string;
+
+  @Column({
+    type: 'enum',
+    enum: ChatType,
+  })
+  type: ChatType;
 
   @Column()
-  message: string;
-
-  @Column({ default: 1 })
-  type: number;
+  sendId: string;
 
   @Column()
-  fromId: number;
+  toId: string;
 
-  @Column()
-  toId: number;
+  @Column({ nullable: true })
+  groupId?: string;
+
+  @Column({
+    type: 'timestamp',
+    default: () => 'CURRENT_TIMESTAMP',
+  })
+  sendTime: Date;
 
   @Column({ default: true })
   isActive: boolean;

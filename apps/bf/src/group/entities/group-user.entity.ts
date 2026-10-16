@@ -3,13 +3,13 @@ import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
 @Entity()
 export class GroupUser {
   @PrimaryGeneratedColumn('uuid')
-  id: number;
+  id: string;
 
   @Column()
-  groupId: number;
+  groupId: string;
 
   @Column()
-  userId: number;
+  userId: string;
 
   @Column()
   name: string;

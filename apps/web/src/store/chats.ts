@@ -34,9 +34,11 @@ export const useChatsStore = defineStore('chats', () => {
     lastChats.value.unshift({ ...chat, lastMsg: msg });
   }
   function getChatDetail(chatId: Chat['id']) {
-    console.log(chats, chatId);
     const res = chats.value.find(
-      (item) => item.friendId === chatId,
+      (item) =>
+        item.id === chatId ||
+        item.friendId === chatId ||
+        item.groupId === chatId,
     ) as Chat | null;
     if (res == null) {
       console.error('not find');

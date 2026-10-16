@@ -8,6 +8,7 @@ import { UsersModule } from './user/user.module';
 
 import { User } from './user/entities/user.entity';
 import { Friend } from './friend/entities/friend.entity';
+import { FriendRequest } from './friend/entities/friend-request.entity';
 import { Group } from './group/entities/group.entity';
 import { GroupUser } from './group/entities/group-user.entity';
 import { Message } from './message/entities/message.entity';
@@ -40,7 +41,7 @@ import { FileModule } from './file/file.module';
           host: 'localhost',
           ...databaseConfig,
           synchronize: true,
-          entities: [User, Friend, Group, GroupUser, Message],
+          entities: [User, Friend, FriendRequest, Group, GroupUser, Message],
         };
       },
     }),

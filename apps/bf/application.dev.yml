@@ -1,10 +1,10 @@
 prot: 3000
 secret: i_chat_dev
 database:
-  host: 152.136.150.117
+  host: localhost
   prot: 3306
-  username: "chat"
-  password: "ZJn6Gn5Lk5DZ34Km"
+  username: "root"
+  password: "DajiaAD@1234"
   database: "chat"
 redis:
   prot: 6379

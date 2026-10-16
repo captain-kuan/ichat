@@ -4,8 +4,9 @@ import { FriendController } from './friend.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Friend } from './entities/friend.entity';
 import { MessageModule } from '../message/message.module';
+import { FriendRequest } from './entities/friend-request.entity';
 @Module({
-  imports: [TypeOrmModule.forFeature([Friend]), MessageModule],
+  imports: [TypeOrmModule.forFeature([Friend, FriendRequest]), MessageModule],
   providers: [FriendService],
   controllers: [FriendController],
 })

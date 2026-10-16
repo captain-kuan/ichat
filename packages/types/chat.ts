@@ -11,7 +11,8 @@ export interface Chat {
     avatar: string;
     name: string;
   };
-  friendId: string;
+  friendId?: string;
+  groupId?: string;
   type: ChatType; //聊天对象类型
   isConcern?: boolean; //关注
   isIgnore?: boolean; //忽略

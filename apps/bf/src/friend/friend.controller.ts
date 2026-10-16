@@ -50,6 +50,14 @@ export class FriendController {
   getFriends(@CurrentUser() user: User) {
     return this.friendService.findAll(user);
   }
+
+  @Get('pending')
+  @ApiBearerAuth()
+  @ApiOperation({ summary: '获取待处理好友申请', description: '返回申请列表' })
+  getPendingRequests(@CurrentUser() user: User) {
+    return this.friendService.getPendingRequests(user);
+  }
+
   @Get(':id')
   @ApiBearerAuth()
   @ApiParam({ name: 'id', description: '好友id' })

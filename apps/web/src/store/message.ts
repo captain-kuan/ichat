@@ -1,11 +1,12 @@
 import { pinia } from '.';
-import { Chat, ChatType, Message, PersonMessage } from '@/types';
+import { Chat, ChatType, Message } from '@/types';
 import { useUserStore } from '@/store';
 
 export const useMessageStore = defineStore('message', () => {
   const { user } = storeToRefs(useUserStore());
 
   const messageMap = reactive<Record<Chat['id'], Message[] | null>>({});
+  const lastSyncAt = ref<number>(0);
   function initMessage(chatId: string) {
     if (messageMap[chatId] == null) {
       messageMap[chatId] = [];
@@ -14,26 +15,62 @@ export const useMessageStore = defineStore('message', () => {
   }
   function pullMessage() {}
   function restore() {}
-  function addMessage(message: Message) {
+
+  function getMessageChatId(message: Message) {
     switch (message.type) {
-      // 如果是收到的私人消息，更新发送者的消息列表
       case ChatType.person:
-        let chatId = message.sendId === user.value.id ? message.toId : message.sendId;
-        console.log(chatId);
-        
-        const hasMsg = messageMap[chatId] != null;
-        const msgs = hasMsg ? messageMap[chatId] : [];
-        msgs.push(message);
-        if (!hasMsg) messageMap[chatId] = msgs;
-        break;
+        return message.sendId === user.value.id ? message.toId : message.sendId;
+      case ChatType.group:
+        return message.groupId || message.toId;
+      case ChatType.system:
+        return 'system';
       default:
         throw Error('not impl');
     }
   }
+
+  function addMessage(message: Message) {
+    const chatId = getMessageChatId(message);
+    const hasMsg = messageMap[chatId] != null;
+    const msgs = hasMsg ? messageMap[chatId] : [];
+    const exists = msgs.some((msg) => {
+      if (msg.id && message.id) {
+        return msg.id === message.id;
+      }
+      return (
+        msg.sendId === message.sendId &&
+        msg.toId === message.toId &&
+        msg.content === message.content &&
+        msg.type === message.type
+      );
+    });
+
+    if (!exists) {
+      msgs.push(message);
+      if (!hasMsg) messageMap[chatId] = msgs;
+    }
+
+    const time = Number(new Date(message.sendTime));
+    if (!Number.isNaN(time)) {
+      lastSyncAt.value = Math.max(lastSyncAt.value, time);
+    }
+  }
+
+  function applySyncedMessages(messages: Message[]) {
+    messages.forEach((message) => {
+      addMessage(message);
+    });
+  }
   function removeMessage() {}
   function revokeMessage() {}
 
-  return { initMessage, addMessage, messageMap };
+  return {
+    initMessage,
+    addMessage,
+    applySyncedMessages,
+    messageMap,
+    lastSyncAt,
+  };
 });
 
 export const useMessageStoreWithOut = () => useMessageStore(pinia);

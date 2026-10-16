@@ -12,3 +12,22 @@ export function sendAddFriend(data: { friendId: string }) {
 export function agreeAddFriend(data: { friendId: string }) {
   return request.post('/friend/agreeAdd', data);
 }
+
+export interface PendingFriendRequest {
+  id: string;
+  fromUserId: string;
+  toUserId: string;
+  status: 'pending' | 'accepted' | 'rejected' | 'expired';
+  createdAt: string;
+  expiredAt: string;
+  fromUser?: {
+    id: string;
+    name?: string;
+    account?: string;
+    avatar?: string;
+  };
+}
+
+export function getPendingFriendRequests() {
+  return request.get<PendingFriendRequest[]>('/friend/pending');
+}

@@ -4,7 +4,7 @@ database:
   host: localhost
   prot: 3306
   username: "root"
-  password: "0000"
+  password: "DajiaAD@1234"
   database: "chat"
 redis:
   prot: 6379

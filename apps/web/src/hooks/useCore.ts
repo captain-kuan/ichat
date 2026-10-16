@@ -3,10 +3,11 @@ import { SocketClient } from '@/utils';
 import {
   useMessageStoreWithOut,
   useChatsStoreWithOut,
-  useUserStore,
   useUserStoreWiteOut,
 } from '@/store';
 import { useLoginCallBack } from '@/hooks';
+import { messageApis } from '@/apis';
+import { showNotify } from 'vant';
 
 let client: SocketClient;
 export function useCore() {
@@ -17,12 +18,30 @@ export function useCore() {
   function initCore() {
     useLoginCallBack(async (token) => {
       client = await SocketClient.getClient(token);
+      const { code, data } = await messageApis.syncMessages(
+        messageStore.lastSyncAt || undefined,
+      );
+      if (code === 0) {
+        messageStore.applySyncedMessages(data || []);
+      }
+
       client.on(MessageEvent.message, (message) => {
         messageStore.addMessage(message);
-        chatStore.updateActiveChat(message.sendId, message);
+        const chatId =
+          message.type === ChatType.group
+            ? message.groupId || message.toId
+            : message.sendId === useStore.user.id
+              ? message.toId
+              : message.sendId;
+        chatStore.updateActiveChat(chatId, message);
       });
       client.on(MessageEvent.sendSuccess, (message) => {});
-      client.on(MessageEvent.addChat, (message) => {});
+      client.on(MessageEvent.addChat, (message) => {
+        showNotify({
+          type: 'primary',
+          message: `${message.sendId} 请求添加你为好友`,
+        });
+      });
     });
   }
 
@@ -33,7 +52,9 @@ export function useCore() {
         sendId: useStore.user.id,
       });
       messageStore.addMessage(message);
-      chatStore.updateActiveChat(message.toId, message);
+      const chatId =
+        message.type === ChatType.group ? message.groupId || message.toId : message.toId;
+      chatStore.updateActiveChat(chatId, message);
     } else {
       // TODO: 消息重发
       console.log(client);
